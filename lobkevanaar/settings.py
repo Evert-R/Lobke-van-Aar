@@ -26,7 +26,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 # Get secret key from environment variables
-SECRET_KEY = os.environ.get('SECRET_KEY')
+#SECRET_KEY = os.environ.get('SECRET_KEY')
+SECRET_KEY = 'ddsajkhdkjl'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # Only set debug to true if run local
@@ -35,7 +36,7 @@ if os.environ.get('DEVELOPMENT'):
 else:
     DEBUG = False
 
-ALLOWED_HOSTS = ['127.0.0.1', 'lobkevanaar.herokuapp.com']
+ALLOWED_HOSTS = ['85.187.140.198']
 
 
 # Application definition
@@ -47,7 +48,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'storages',
     'works',
     'about',
     'shop',
@@ -151,41 +151,19 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend'
 ]
 
-# Enable caching for static files from s3
-AWS_S3_OBJECT_PARAMETERS = {
-    'Expires': 'Thu, 31 Dec 2099 20:00:00 GMT',
-    'CacheControl': 'max-age=94608000'
-}
-
-AWS_STORAGE_BUCKET_NAME = 'lobkevanaar'
-AWS_S3_REGION_NAME = 'eu-west-1'
-AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID")
-AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY")
-
-AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
-
-# use aws access control list
-AWS_DEFAULT_ACL = None
 
 STATICFILES_LOCATION = 'static'
 
-# When running local use local static files
-if os.environ.get('DEVELOPMENT'):
-    STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
-# When running deployed use custom storage (AWS_S3)
-else:
-    STATICFILES_STORAGE = 'custom_storages.StaticStorage'
+
+STATICFILES_STORAGE = 'custom_storages.StaticStorage'
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
 
-MEDIAFILES_LOCATION = 'media'
-DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
-
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, MEDIAFILES_LOCATION)
+MEDIA_URL = "media/"
 
 STRIPE_PUBLISHABLE = os.getenv('STRIPE_PUBLISHABLE')
 STRIPE_SECRET = os.getenv('STRIPE_SECRET')
