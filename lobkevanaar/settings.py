@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-import dj_database_url
 
 # Load local environment variables if we run local
 if os.path.exists('env.py'):
@@ -26,8 +25,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 # Get secret key from environment variables
-#SECRET_KEY = os.environ.get('SECRET_KEY')
-SECRET_KEY = 'ddsajkhdkjl'
+SECRET_KEY = os.environ.get('SECRET_KEY')
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # Only set debug to true if run local
@@ -105,9 +104,15 @@ if os.environ.get('TEST'):
         }
     }
 else:
-    DATABASES = {'default': dj_database_url.parse(
-        os.environ.get('DATABASE_URL')),
-
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': os.environ.get("POSTGRESQL_NAME"),
+            'USER': os.environ.get("POSTGRESQL_USER"),
+            'PASSWORD': os.environ.get("POSTGRESQL_PASS"),
+            'HOST': 'localhost',
+            'PORT': '',
+        }
     }
 
 
