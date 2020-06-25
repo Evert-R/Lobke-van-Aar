@@ -110,8 +110,8 @@ else:
             'NAME': os.environ.get("POSTGRESQL_NAME"),
             'USER': os.environ.get("POSTGRESQL_USER"),
             'PASSWORD': os.environ.get("POSTGRESQL_PASS"),
-            'HOST': 'localhost',
-            'PORT': '',
+            'HOST': '127.0.0.1',
+            'PORT': '5432',
         }
     }
 
