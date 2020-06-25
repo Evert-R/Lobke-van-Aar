@@ -35,7 +35,9 @@ if os.environ.get('DEVELOPMENT'):
 else:
     DEBUG = False
 
-ALLOWED_HOSTS = ['85.187.140.198']
+ALLOWED_HOSTS = ['85.187.140.198',
+                 'findme-eat.online',
+                 '127.0.0.1']
 
 
 # Application definition
