@@ -61,19 +61,22 @@
                     <h5>{{ work.title }}</h5>
                 </div>
                 <!-- Main image -->
-                <a href="{% url 'shop:shop_details' pk=work.id %}?next={{ request.path|urlencode }}"
-                    title="View this shop item">
-                    {% if work.shop_settings.main_image %}
-                    {# check if a custom main image was set #}
-                    <div class="er-shop-image"
-                        style="background-image: url({{ MEDIA_URL }}{{ work.shop_settings.main_image.work_image }});">
+                <div class="er-image-wrap">
+                    <a href="{% url 'shop:shop_details' pk=work.id %}?next={{ request.path|urlencode }}"
+                        title="View this shop item">
+                        {% if work.shop_settings.main_image %}
+                        {# check if a custom main image was set #}
+                        <div class="er-shop-image"
+                            style="background-image: url({{ MEDIA_URL }}{{ work.shop_settings.main_image.work_image }});">
+                        </div>
                         {% else %}
                         <div class="er-shop-image" style="background-image: url({{ MEDIA_URL }}{{ work.main_image }});">
-                            {% endif %}
                         </div>
-                </a>
+                        {% endif %}
 
-                <div class="er-shop-body">
+                    </a>
+                </div>
+                <div>
                     <p class="text-center">{{ work.shop_settings.work_type }}</p>
                     <div>
                         <table>

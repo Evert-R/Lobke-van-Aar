@@ -1,109 +1,133 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<section class="container-md er-shop-details">
+<section class="container-lg er-shop-details">
 
     <!-- Show details of a shop item -->
     <div class="row">
-        <div class="col-12 col-lg-10 offset-lg-1">
+        <div class="col-12 col-xl-10 offset-xl-1">
             <div class="row er-shop-wrap">
-                {% if work.shop_settings.main_image %}
-                {# check if a custom main image was set #}
-                <div class="col-12 order-1 col-sm-6 er-shop-detail-image" id="er-select-view"
-                    style="background-image: url({{ MEDIA_URL }}{{ work.shop_settings.main_image.work_image }});">
-                    {% else %}
-                    <div class="col-12 order-1 col-sm-6 er-shop-detail-image" id="er-select-view"
-                        style="background-image: url({{ MEDIA_URL }}{{ work.main_image }});">
-                        {% endif %}
+
+                <div class="col-12 order-1 col-md-7 col-lg-6 er-shop-left">
+                    {% if work.shop_settings.main_image %}
+                    {# check if a custom main image was set #}
+                    <div class="er-shop-detail-image" id="er-select-view"
+                        style="background-image: url({{ MEDIA_URL }}{{ work.shop_settings.main_image.work_image }});">
                     </div>
+                    {% else %}
+                    <div class="er-shop-detail-image" id="er-select-view"
+                        style="background-image: url({{ MEDIA_URL }}{{ work.main_image }});">
+                    </div>
+                    {% endif %}
 
-                    <div class="col-12 order-3 col-sm-6 order-sm-3">
-                        <div class="er-shop-top">
-                            <h1>{{ work.title }}</h1>
-                            <p>{{ work.under_title }}</p>
+                    <!-- Get all extra images and create thumbs to view them -->
+                    <div class="er-image-select">
+
+
+
+                        <!-- First thumb is the main image -->
+                        <div class="er-select-thumb" id="er-main-select"
+                            style="background-image: url({{ MEDIA_URL }}{{ work.main_image }});">
                         </div>
-                        <!-- Show item description -->
-                        <div class="er-shop-body">
-                            {% if work.shop_settings.personal_text %}
-                            {# if selected show personal text #}
-                            <p>
-                                {{ work.shop_settings.personal_message }}
-                            </p>
-                            {% endif %}
+                        <script>
+                            $('#er-main-select').click(function () {
+                                $('.er-shop-detail-image').css('background-image', 'url({{ MEDIA_URL }}{{ work.main_image }})');
+                            });
+                        </script>
 
-                            {% if work.shop_settings.standard_text %}
-                            {# if selected show generated text #}
+                        <!-- generate the rest of the thumbs -->
+                        {% for image in images %}
+
+                        <div class="er-select-thumb" id="image{{ image.id }}"
+                            style="background-image: url({{ MEDIA_URL }}{{ image.work_image }});"></div>
+                        <script>
+                            $('#image{{ image.id }}').click(function () {
+                                $('.er-shop-detail-image').css('background-image', 'url({{ MEDIA_URL }}{{ image.work_image }})');
+                            });
+                        </script>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="col-12 order-3 col-md-5 col-lg-6 order-sm-2">
+                    <div class="er-shop-top">
+                        <h1>{{ work.title }}</h1>
+                        <p>{{ work.under_title }}</p>
+                    </div>
+                    <!-- Show item description -->
+                    <div class="er-shop-body">
+                        {% if work.shop_settings.personal_text %}
+                        {# if selected show personal text #}
+                        <p>
+                            {{ work.shop_settings.personal_message }}
+                        </p>
+                        {% endif %}
+
+                        {% if work.shop_settings.standard_text %}
+                        {# if selected show generated text #}
+                        <div>
                             <p>
                                 {{ work.shop_settings.work_type }} {{ work.shop_settings.material }} with a size of
-                                {{ work.shop_settings.work_size }}.</p>
-                            <p>{% if not work.shop_settings.edition_count == 0 %}Limited edition of
+                                {{ work.shop_settings.work_size }}.
+                            </p>
+                        </div>
+                        <div>
+                            <p>
+                                {% if not work.shop_settings.edition_count == 0 %}Limited edition of
                                 {{ work.shop_settings.edition_count }}
                                 {% endif %} Printed in the Netherlands. Signed and
-                                numbered by yours truly.</p>
-                            <p class="text-right">
+                                numbered by yours truly.
+                            </p>
+                        </div>
+                        <div>
+                            <p class="text-left">
                                 {% if work.shop_settings.frame == 'NF' %} The frame is not included.{% endif %}
                                 {% if work.shop_settings.frame == 'FR' %} The frame is included.{% endif %}
                             </p>
-                            {% endif %}
                         </div>
+                        {% endif %}
                     </div>
+                    <table>
+                        <tr>
+                            <td class="er-price-cell">
+                                {% if work.shop_settings.on_sale %}
+                                {# When on sale show discounted price#}
+                                <span>
+                                    {{ work.shop_settings.discount_price }}
+                                    <i class="fas fa-euro-sign"></i>
+                                    <del class="er-strike-price">
+                                        {{ work.shop_settings.price }} <i class="fas fa-euro-sign"></i>
+                                    </del>
+                                </span>
+                                {% else %}
+                                <span>{{ work.shop_settings.price }} <i class="fas fa-euro-sign"></i></span>
+                                {% endif %}
+                            </td>
 
-                    <!-- Get all extra images and create link-dots to view them -->
-                    <div class="col-12 order-2 col-sm-6 order-sm-3">
-                        <div class="er-image-select">
-                            <!-- First dot is the main image -->
-                            <span id="er-main-select"><i class="fas fa-circle"></i></span>
-                            <script>
-                                $('#er-main-select').click(function () {
-                                    $('.er-shop-detail-image').css('background-image', 'url({{ MEDIA_URL }}{{ work.main_image }})');
-                                });
-                            </script>
-                            <!-- generate the rest of the dots -->
-                            {% for image in images %}
-                            <span id="image{{ image.id }}"><i class="fas fa-circle"></i></span>
-                            <script>
-                                $('#image{{ image.id }}').click(function () {
-                                    $('.er-shop-detail-image').css('background-image', 'url({{ MEDIA_URL }}{{ image.work_image }})');
-                                });
-                            </script>
-                            {% endfor %}
-                        </div>
-                    </div>
-
-                    <!-- The price and add cart button -->
-                    <div class="col-12 order-4 col-sm-6">
-                        <table>
-                            <tr>
-                                <td class="er-price-cell">
-                                    {% if work.shop_settings.on_sale %}
-                                    {# When on sale show discounted price#}
-                                    <span>
-                                        {{ work.shop_settings.discount_price }}
-                                        <i class="fas fa-euro-sign"></i>
-                                        <del class="er-strike-price">
-                                            {{ work.shop_settings.price }} <i class="fas fa-euro-sign"></i>
-                                        </del>
-                                    </span>
-                                    {% else %}
-                                    <span>{{ work.shop_settings.price }} <i class="fas fa-euro-sign"></i></span>
-                                    {% endif %}
-                                </td>
-
-                                <td class="er-cart-cell">
-                                    <a href="{% url 'cart:add_cart' id=work.pk %}?next={{ request.path|urlencode }}"
-                                        title="Add item to shopping cart">
-                                        <div class="er-nav-button er-shop-button">
-                                            <i class="fas fa-plus"></i>
-                                            <i class="fas fa-shopping-cart"></i>
-                                        </div>
-                                    </a>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
+                            <td class="er-cart-cell">
+                                <a href="{% url 'cart:add_cart' id=work.pk %}?next={{ request.path|urlencode }}"
+                                    title="Add item to shopping cart">
+                                    <div class="er-nav-button er-shop-button">
+                                        <i class="fas fa-plus"></i>
+                                        <i class="fas fa-shopping-cart"></i>
+                                    </div>
+                                </a>
+                            </td>
+                        </tr>
+                    </table>
                 </div>
+
+
+
+
+
+
+
             </div>
+
         </div>
+
+    </div>
+    </div>
 </section>
 
 <!-- Load special screen events (highlite shop item in navbar-->
