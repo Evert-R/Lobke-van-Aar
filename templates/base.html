@@ -230,7 +230,17 @@
     {% if messages %}
     {# Show notifications #}
     <div class="er-messages">
-        {% for message in messages %} {{ message }} {% endfor %}
+        {% for message in messages %}
+        {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+        <div class="er-error-message">
+            {{ message }}
+        </div>
+        {% else %}
+        <div class="er-success-message">
+            {{ message }}
+        </div>
+        {% endif %}
+        {% endfor %}
     </div>
     {% endif %}
 
