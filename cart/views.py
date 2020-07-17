@@ -1,10 +1,15 @@
 from django.shortcuts import render, get_object_or_404, redirect
-
+from django.contrib import auth, messages
 # Create your views here.
 
 
 def view_cart(request):
     next = request.GET.get('next', '/')
+    cart = request.session.get('cart', {})
+    if cart == {}:
+        messages.error(
+                request, 'Your shopping cart is empty')
+        return redirect('shop:all_shop_works')
     return render(request, "cart.html", {'next': next})
 
 

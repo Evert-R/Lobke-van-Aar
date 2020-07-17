@@ -21,14 +21,20 @@ stripe.api_key = settings.STRIPE_SECRET
 @login_required(login_url='accounts:register_user')
 def check_out(request):
     next = request.GET.get('next', '/')
+    # Get cart contents
+    cart = request.session.get('cart', {})
+    total = 0
+    # Return to shop if cart is empty
+    if cart == {}:
+        messages.error(
+                request, 'There is nothing to check out')
+        return redirect('shop:all_shop_works')
     if not request.user.is_authenticated:
         messages.error(request, "Please register before checking out")
         return redirect('accounts:register_user')
     # Get logged in user
     active_user = request.user
-    # Get cart contents
-    cart = request.session.get('cart', {})
-    total = 0
+
     try:
         current_user_details = user_details.objects.get(user=active_user)
     except:
