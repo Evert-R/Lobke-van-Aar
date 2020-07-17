@@ -23,7 +23,8 @@ def add_cart(request, id):
         cart[id] = cart.get(id, 1)
 
     request.session['cart'] = cart
-
+    messages.success(
+                request, 'The item was added to your cart')
     return redirect(next)
 
 
@@ -37,5 +38,6 @@ def remove_cart(request, id):
         request.session.modified = True
 
     request.session['cart'] = cart
-
+    messages.success(
+                request, 'The item was removed from your cart')
     return redirect(next)
