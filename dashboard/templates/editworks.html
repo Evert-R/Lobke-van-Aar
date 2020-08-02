@@ -9,11 +9,13 @@
             <h3>Edit {{ work.title }}:</h3>
         </div>
         <!-- About this page -->
+
         <div class="er-form-wrap">
             <a data-toggle="collapse" href="#er-help-work">
-                <h2><i class="fas fa-angle-down"></i> About this page</h2>
+                <h2 class="er-drop-down"><i class="fas fa-angle-down"></i> About this page</h2>
             </a>
         </div>
+
         <div class="collapse er-info-wrap" id="er-help-work">
             <h2 class="text-left">Add a work / Edit work details:</h2>
             <p class="text-left">This panel is used to add new works to the portfolio. Make sure that you
@@ -51,9 +53,9 @@
         <div class="er-form-wrap">
             <a data-toggle="collapse" href="#er-work-details">
                 {% if work %}
-                <h2><i class="fas fa-angle-down"></i> Edit work details</h2>
+                <h2 class="er-drop-down"><i class="fas fa-angle-down"></i> Edit work details</h2>
                 {% else %}
-                <h2><i class="fas fa-angle-down"></i> Add a new work</h2>
+                <h2 class="er-drop-down"><i class="fas fa-angle-down"></i> Add a new work</h2>
                 {% endif %}
             </a>
         </div>
@@ -74,7 +76,7 @@
             {# Check if there is an existing work with shopitem #}
             <div class="er-form-wrap">
                 <a data-toggle="collapse" href="#er-shop-details">
-                    <h2><i class="fas fa-angle-down"></i> Edit shop details</h2>
+                    <h2 class="er-drop-down"><i class="fas fa-angle-down"></i> Edit shop details</h2>
                 </a>
                 <div class="collapse" id="er-shop-details">
                     {% crispy edit_shop edit_shop.helper %}
@@ -87,7 +89,7 @@
             {# Check if a work already exists #}
             <div class="er-form-wrap">
                 <a data-toggle="collapse" href="#er-extra-images">
-                    <h2><i class="fas fa-angle-down"></i> Upload extra images</h2>
+                    <h2 class="er-drop-down"><i class="fas fa-angle-down"></i> Upload extra images</h2>
                 </a>
                 <div class="collapse" id="er-extra-images">
                     {% crispy add_images add_images.helper %}
@@ -112,7 +114,7 @@
             <!-- Edit/add categories -->
             <div class="er-form-wrap er-attr-form">
                 <a data-toggle="collapse" href="#er-manage-categories">
-                    <h2><i class="fas fa-angle-down"></i> Manage categories</h2>
+                    <h2 class="er-drop-down"><i class="fas fa-angle-down"></i> Manage categories</h2>
                 </a>
                 <div class="collapse" id="er-manage-categories">
                     <table class="er-dashboard-list table table-hover">
@@ -161,7 +163,7 @@
             <!-- Edit/add work-types -->
             <div class="er-form-wrap er-attr-form">
                 <a data-toggle="collapse" href="#er-manage-worktypes">
-                    <h2><i class="fas fa-angle-down"></i> Manage work types</h2>
+                    <h2 class="er-drop-down"><i class="fas fa-angle-down"></i> Manage work types</h2>
                 </a>
                 <div class="collapse" id="er-manage-worktypes">
                     <table class="er-dashboard-list table table-hover">
@@ -210,7 +212,7 @@
             <!-- Edit/add work-sizes -->
             <div class="er-form-wrap er-attr-form">
                 <a data-toggle="collapse" href="#er-manage-worksizes">
-                    <h2><i class="fas fa-angle-down"></i> Manage work sizes</h2>
+                    <h2 class="er-drop-down"><i class="fas fa-angle-down"></i> Manage work sizes</h2>
                 </a>
                 <div class="collapse" id="er-manage-worksizes">
                     <table class="er-dashboard-list table table-hover">
@@ -259,7 +261,7 @@
             <!-- Edit/add materials -->
             <div class="er-form-wrap er-attr-form">
                 <a data-toggle="collapse" href="#er-manage-materials">
-                    <h2><i class="fas fa-angle-down"></i> Manage materials</h2>
+                    <h2 class="er-drop-down"><i class="fas fa-angle-down"></i> Manage materials</h2>
                 </a>
                 <div class="collapse" id="er-manage-materials">
                     <table class="er-dashboard-list table table-hover">
@@ -323,7 +325,7 @@
             <div class="col-6">
                 <div class="er-form-wrap">
                     <a data-toggle="collapse" href="#er-main-image">
-                        <h2><i class="fas fa-angle-down"></i> Work main</h2>
+                        <h2 class="er-drop-down"><i class="fas fa-angle-down er-up"></i> Work main</h2>
                     </a>
                 </div>
 
@@ -336,7 +338,7 @@
                 {# Show the shop main image if assigned #}
                 <div class="er-form-wrap">
                     <a data-toggle="collapse" href="#er-shop-image">
-                        <h2><i class="fas fa-angle-down"></i> Shop main</h2>
+                        <h2 class="er-drop-down"><i class="fas fa-angle-down er-up"></i> Shop main</h2>
                     </a>
                 </div>
                 <div class="collapse show er-form-wrap" id="er-shop-image">
@@ -354,7 +356,7 @@
         {% if images|length > 0 %}
         <div class="er-form-wrap">
             <a data-toggle="collapse" href="#er-edit-images">
-                <h2><i class="fas fa-angle-down"></i> Extra images:</h2>
+                <h2 class="er-drop-down"><i class="fas fa-angle-down"></i> Extra images:</h2>
             </a>
         </div>
         <div class="collapse er-wrap" id="er-edit-images">
@@ -457,5 +459,8 @@
     </div>
     {% endif %}
 </div>
+
+<!-- Load special screen events (rotate arrow dropdown) -->
+<script src="{% static 'js/dropdown-events.js' %}"></script>
 
 {% endblock %}

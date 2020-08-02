@@ -27,7 +27,7 @@
             <!-- Show a slide open form to adjust shipping details -->
             <div class="er-form-wrap">
                 <a data-toggle="collapse" href="#er-shipping-details">
-                    <h2><i class="fas fa-angle-down"></i> Edit your shipping details</h2>
+                    <h2 class="er-drop-down"><i class="fas fa-angle-down"></i> Change the shipping address</h2>
                 </a>
                 <div class="collapse" id="er-shipping-details">
                     <form class="form-horizontal" method="post">
@@ -36,28 +36,53 @@
                 </div>
             </div>
             <!-- Show shipping details and total price -->
-            <div class="row er-list-wrap">
-                <div class="col-12 col-sm-5 er-checkout-address">
-                    <p>{{ user.first_name }} {{ user.last_name }}<br>
-                        {{ user_details.address1 }}<br>
-                        {% if user_details.address2 %}
-                        {{ user_details.address2 }}<br>
-                        {% endif %}
-                        {{ user_details.postcode }}<br>
-                        {{ user_details.city }}<br>
-                        {{ user_details.country }}<br>
-                    </p>
-                </div>
-                <div class="col-6 col-sm-3 er-checkout-left">
-                    <p>Ship to :</p>
-                    <p>Shipping cost :</p>
-                    <p>Total :</p>
-                </div>
-                <div class="col-6 col-sm-4 er-checkout-right">
-                    <p>{{ user_details.shipping.region }}</p>
-                    <p>{{ user_details.shipping.price }} <i class="fas fa-euro-sign"></i></p>
-                    <p>{{ total|add:user_details.shipping.price }} <i class="fas fa-euro-sign"></i></p>
-                </div>
+            <div class="er-info-wrap er-fat-info">
+
+                <table class="table-hover">
+                    <tr>
+                        <td>
+                            {{ user.first_name }} {{ user.last_name }}
+                        </td>
+                        <td class="text-right">
+                            Shipping costs: {{ user_details.shipping.price }} <i class="fas fa-euro-sign"></i>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            {{ user_details.address1 }}
+                        </td>
+                        <td class="text-right">
+                            To {{ user_details.shipping.region }}
+
+                        </td>
+                    </tr>
+                    {% if user_details.address2 %}
+                    <tr>
+                        <td>
+                            {{ user_details.address2 }}<br>
+                        </td>
+                        <td class="text-right">
+                        </td>
+                    </tr>
+                    {% endif %}
+                    <tr>
+                        <td>
+                            {{ user_details.postcode }}, {{ user_details.city }}
+                        </td>
+                        <td class="text-right">
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            {{ user_details.country }}
+                        </td>
+                        <td class="text-right">
+                            Total price: {{ total }} <i class="fas fa-euro-sign"></i>
+                        </td>
+                    </tr>
+                </table>
+
             </div>
             <!-- The payment form -->
             <div class="er-form-wrap">
@@ -199,5 +224,6 @@
 <script>
     $('#er-shop-active').addClass('active');
 </script>
-
+<!-- Load special screen events (rotate arrow dropdown) -->
+<script src="{% static 'js/dropdown-events.js' %}"></script>
 {% endblock %}
