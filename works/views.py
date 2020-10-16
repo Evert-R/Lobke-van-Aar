@@ -24,7 +24,30 @@ def all_works(request):
             return render(request, "works.html", {"works": works,
                                                   "filter_form": filter_form})
     else:
-        return render(request, "works.html", {"works": works,
+        """
+        Because bootstrap orders card columns from top to bottom
+        we create a new list that orders them horizontally
+        """
+        view_works = []
+        # Get the total works count
+        total = works.count()
+        # Calculate how many rows we would get
+        rows = int(math.ceil(total / 3))
+        # Order the horizontally per row
+        for iterator in range(rows):
+            try:
+                view_works.append(works[iterator])
+            except:
+                pass
+            try:
+                view_works.append(works[iterator+rows])
+            except:
+                pass
+            try:
+                view_works.append(works[iterator+(rows*2)])
+            except:
+                pass
+        return render(request, "works.html", {"works": view_works,
                                               "filter_form": filter_form})
 
 
