@@ -36,6 +36,13 @@ else:
     DEBUG = False
 
 ALLOWED_HOSTS = ['85.187.140.198',
+                 'lobkevanaar.com',
+                 'www.lobkevanaar.com',
+                 'lobkevanaar.nl',
+                 'www.lobkevanaar.nl',
+                 '82.168.193.55',
+                 '192.168.2.12',
+                 '192.168.2.10',
                  'findme-eat.online',
                  '127.0.0.1']
 
@@ -56,6 +63,7 @@ INSTALLED_APPS = [
     'checkout',
     'dashboard',
     'accounts',
+    'stripe',
     'crispy_forms'
 ]
 
