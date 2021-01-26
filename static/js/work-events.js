@@ -1,5 +1,5 @@
 // Set menu item active
-$('#er-works-active').addClass('active');
+$('#er-works-active').addClass('er-center-active');
 
 // Remove the shop navigation
 $('#er-shop-nav').addClass('d-none');
