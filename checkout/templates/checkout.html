@@ -1,124 +1,168 @@
-{% extends 'base.html' %}
-{% load static %}
-{% load crispy_forms_tags %}
-{% block content %}
-
-{% block head_js %}
+{% extends 'base.html' %} {% load static %} {% load crispy_forms_tags %} {% block content %}
 <!-- Load stripe payment javascript -->
-<script type="text/javascript" src="https://js.stripe.com/v2/"></script>
-<script type="text/javascript">
-    //<![CDATA[
-    Stripe.publishableKey = '{{ publishable }}';
-    //]]>
-</script>
-<script type="text/javascript" src="{% static 'js/stripe.js' %}"></script>
-{% endblock %}
+<script src="https://js.stripe.com/v3/"></script>
+<script src="{% static 'js/stripe-checkout.js' %}"></script>
+<link rel="stylesheet" href="{% static 'css/stripe.css' %}">
+
+
 
 <section class="container-lg er-checkout">
     <div class="row">
         <div class="col-12">
             <div class="er-wrap">
-                <h1>Please check out here</h1>
+                <h1>Please confirm your order here</h1>
             </div>
         </div>
     </div>
     <div class="row">
         <div class="col-12 order-2 col-md-6 order-md-2">
-            <!-- Show a slide open form to adjust shipping details -->
+
             <div class="er-form-wrap">
-                <a data-toggle="collapse" href="#er-shipping-details">
-                    <h2 class="er-drop-down"><i class="fas fa-angle-down"></i> Change the shipping address</h2>
-                </a>
-                <div class="collapse" id="er-shipping-details">
-                    <form class="form-horizontal" method="post">
-                        {% crispy accounts_form accounts_form.helper %}
-                    </form>
-                </div>
-            </div>
-            <!-- Show shipping details and total price -->
-            <div class="er-info-wrap er-fat-info">
-
-                <table class="table-hover">
-                    <tr>
-                        <td>
-                            {{ user.first_name }} {{ user.last_name }}
-                        </td>
-                        <td class="text-right">
-                            Shipping costs: {{ user_details.shipping.price }} <i class="fas fa-euro-sign"></i>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            {{ user_details.address1 }}
-                        </td>
-                        <td class="text-right">
-                            To {{ user_details.shipping.region }}
-
-                        </td>
-                    </tr>
-                    {% if user_details.address2 %}
-                    <tr>
-                        <td>
-                            {{ user_details.address2 }}<br>
-                        </td>
-                        <td class="text-right">
-                        </td>
-                    </tr>
-                    {% endif %}
-                    <tr>
-                        <td>
-                            {{ user_details.postcode }}, {{ user_details.city }}
-                        </td>
-                        <td class="text-right">
-
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            {{ user_details.country }}
-                        </td>
-                        <td class="text-right">
-                            Total price: {{ total }} <i class="fas fa-euro-sign"></i>
-                        </td>
-                    </tr>
-                </table>
-
-            </div>
-            <!-- The payment form -->
-            <div class="er-form-wrap">
-                <h2>Place your order:</h2>
-            </div>
-            <div class="er-form-wrap">
-                <form method="post" id="payment-form" action="{% url 'checkout:check_out' %}">
-                    <div id="credit-card-errors" style="display: none;">
-                        <div id="alert-message block-message error" id="stripe-error-message"></div>
+                <form class="form-horizontal" id="er-complete">
+                    {% csrf_token %}
+                    <input type="hidden" id="order_number" value="{{order_number}}">
+                    <input type="hidden" value="{{ client_secret }}" id="client_secret" name="client_secret">
+                    <div id="div_id_address1" class="form-group row">
+                        <label for="id_address1" class="col-form-label col-sm-4 er-form-padding requiredField">
+                            Address1<span class="asteriskField">*</span>
+                        </label>
+                        <div class="col-sm-8 er-form-padding">
+                            <input type="text" name="address1" value="{{ user_details.address1 }}" maxlength="50"
+                                class="textinput textInput form-control" required="" id="address1">
+                        </div>
                     </div>
-                    {% crispy payment_form payment_form.helper %}
-
+                    <div id="div_id_address2" class="form-group row">
+                        <label for="id_address2" class="col-form-label col-sm-4 er-form-padding">
+                            Address2
+                        </label>
+                        <div class="col-sm-8 er-form-padding">
+                            <input type="text" name="address2" value="{{ user_details.address2 }}" maxlength="50"
+                                class="textinput textInput form-control" id="address2">
+                        </div>
+                    </div>
+                    <div id="div_id_postcode" class="form-group row">
+                        <label for="id_postcode" class="col-form-label col-sm-4 er-form-padding requiredField">
+                            Postcode<span class="asteriskField">*</span>
+                        </label>
+                        <div class="col-sm-8 er-form-padding">
+                            <input type="text" name="postcode" value="{{ user_details.postcode }}" maxlength="50"
+                                class="textinput textInput form-control" required="" id="postcode">
+                        </div>
+                    </div>
+                    <div id="div_id_city" class="form-group row">
+                        <label for="id_city" class="col-form-label col-sm-4 er-form-padding requiredField">
+                            City<span class="asteriskField">*</span>
+                        </label>
+                        <div class="col-sm-8 er-form-padding">
+                            <input type="text" name="city" value="{{ user_details.city }}" maxlength="50"
+                                class="textinput textInput form-control" required="" id="city">
+                        </div>
+                    </div>
+                    <div id="div_id_country" class="form-group row">
+                        <label for="id_country" class="col-form-label col-sm-4 er-form-padding requiredField">
+                            Country<span class="asteriskField">*</span>
+                        </label>
+                        <div class="col-sm-8 er-form-padding">
+                            <input type="text" name="country" value="{{ user_details.country }}" maxlength="50"
+                                class="textinput textInput form-control" required="" id="country">
+                        </div>
+                    </div>
+                    <div id="div_id_telephone" class="form-group row">
+                        <label for="id_telephone" class="col-form-label col-sm-4 er-form-padding">
+                            Telephone
+                        </label>
+                        <div class="col-sm-8 er-form-padding">
+                            <input type="text" name="telephone" value="{{ user_details.telephone }}" maxlength="25"
+                                class="textinput textInput form-control" id="telephone">
+                        </div>
+                    </div>
+                    <div id="div_id_shipping" class="form-group row">
+                        <label for="id_shipping" class="col-form-label col-sm-4 er-form-padding requiredField">
+                            Shipping<span class="asteriskField">*</span>
+                        </label>
+                        <div class="col-sm-8 er-form-padding">
+                            <select name="shipping" class="select form-control" required="" id="id_shipping">
+                                <option value="">---------</option>
+                                <option value="1" selected="">The Netherlands</option>
+                            </select>
+                        </div>
+                    </div>
                 </form>
             </div>
+
+            <div class="er-form-wrap">
+                <div class="sr-root">
+                    <div class="sr-main">
+                        <div class="sr-picker">
+                            <button class="sr-pm-button selected" id="card-button">
+                                <i class="far fa-credit-card"></i>Credit Card
+                            </button>
+                            <button class="sr-pm-button" id="ideal-button">
+                                <i class="fab fa-ideal"></i>Ideal
+                            </button>
+                        </div>
+                        <form class="sr-payment-form card" id="pay-form">
+                            <div class="sr-combo-inputs-row">
+                                <div class="sr-input sr-element sr-card-element" id="card-element">
+                                    <!-- A Stripe card Element will be inserted here. -->
+                                </div>
+                                <div class="sr-input sr-element hidden" id="ideal-bank-element">
+                                    <!-- A Stripe iDEAL Element will be inserted here. -->
+                                </div>
+                            </div>
+                            <div class="sr-field-error" id="card-errors" role="alert"></div>
+                            <button class="btn btn-primary er-green" id="submit" type="submit">
+                                <div class="spinner hidden" id="spinner"></div>
+                                <span id="button-text">Pay</span><span id="order-amount"></span>
+                            </button>
+                        </form>
+                        <div class="sr-result hidden">
+                            <p>Payment completed<br /></p>
+                            <pre>
+                              <code></code>
+                            </pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
         </div>
 
-        <div class="col-12 order-1 col-md-6 order-md-2">
-            <!-- Message from the site owner -->
-            <div class="er-info-wrap">
-                <h2>Thank you so much for purchasing one of my works!</h2>
-                <p>After I have received your payment I will prepare the package with the greatest care and will sent
-                    you
-                    an e-mail with the tracking code.</p>
-                <p> If there's anything you would want to change or inform me about,
-                    please do not hesitate to send me an email.</p>
-                <p class="text-center"><a href="mailto:info@lobkevanaar">info@lobkevanaar.nl</a></p>
 
+
+
+
+
+        <div class="col-12 order-1 col-md-6 order-md-2">
+            <!-- Show total and shipping costs -->
+            <div class="row">
+                <div class="col-6 er-checkout-left">
+                    <p>Ship to :</p>
+                    <p>Shipping cost :</p>
+                </div>
+                <div class="col-6 er-checkout-right">
+                    <p>{{ user_details.shipping.region }}</p>
+                    <p>{{ user_details.shipping.price }} <i class="fas fa-euro-sign"></i></p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-6 er-checkout-left">
+                    <p>Total :</p>
+                </div>
+                <div class="col-6 er-checkout-right">
+                    <p>{{ total|add:user_details.shipping.price }} <i class="fas fa-euro-sign"></i></p>
+                </div>
             </div>
             <div class="row er-list-divider">
                 <div class="col-12">
-                    <h2>Order details:</h2>
                     <p>
                         <hr>
                     </p>
                 </div>
             </div>
+
             <!-- Show all items in the shopping cart -->
             {% for item in cart_items %}
             <div class="row er-list-wrap">
@@ -134,7 +178,6 @@
                         <div class="er-list-wrap">
                             <h5>{{ item.work.title }}</h5>
                             <p>
-                                {{ item.work.shop_settings.work_type }}<br>
                                 {{ item.work.shop_settings.work_size }}
                             </p>
                             <p class="er-quantity">
@@ -150,19 +193,17 @@
                         <table>
                             <tr>
                                 <td class="er-price-cell">
-                                    {% if item.work.shop_settings.on_sale %}
-                                    {# Show discounted price if on_sale #}
+                                    {% if item.work.shop_settings.on_sale %} {# Show discounted price if on_sale #}
                                     <span>
                                         {{ item.work.shop_settings.discount_price }} <i class="fas fa-euro-sign"></i>
-                                    </span>
-                                    {% else %}
+                                    </span> {% else %}
                                     <span>{{ item.work.shop_settings.price }} <i class="fas fa-euro-sign"></i></span>
                                     {% endif %}
                                 </td>
                                 <td class="er-cart-cell">
                                     <a
                                         href="{% url 'cart:add_cart' id=item.work.pk %}?next={{ request.path|urlencode }}">
-                                        <div class="er-nav-button er-shop-button">
+                                        <div class="er-button er-shop-button">
                                             <i class="fas fa-plus"></i>
                                             <i class="fas fa-shopping-cart"></i>
                                         </div>
@@ -171,7 +212,7 @@
                                 <td class="er-cart-cell">
                                     <a
                                         href="{% url 'cart:remove_cart' id=item.work.pk %}?next={{ request.path|urlencode }}">
-                                        <div class="er-nav-button er-shop-button">
+                                        <div class="er-button er-shop-button">
                                             <i class="fas fa-minus"></i>
                                             <i class="fas fa-shopping-cart"></i>
                                         </div>
@@ -190,32 +231,7 @@
                 </div>
             </div>
             {% endfor %}
-            <!-- Show total and shipping costs -->
-            <div class="row">
-                <div class="col-6 er-checkout-left">
-                    <p>Ship to :</p>
-                    <p>Shipping cost :</p>
-                </div>
-                <div class="col-6 er-checkout-right">
-                    <p>{{ user_details.shipping.region }}</p>
-                    <p>{{ user_details.shipping.price }} <i class="fas fa-euro-sign"></i></p>
-                </div>
-            </div>
-            <div class="row er-list-divider">
-                <div class="col-12">
-                    <p>
-                        <hr>
-                    </p>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-6 er-checkout-left">
-                    <p>Total :</p>
-                </div>
-                <div class="col-6 er-checkout-right">
-                    <p>{{ total|add:user_details.shipping.price }} <i class="fas fa-euro-sign"></i></p>
-                </div>
-            </div>
+
         </div>
     </div>
 </section>

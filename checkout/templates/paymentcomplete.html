@@ -1,0 +1,105 @@
+{% extends 'base.html' %} {% load static %} {% load crispy_forms_tags %} {% block content %}
+
+<section class="container-lg er-checkout">
+    <div class="row">
+        <div class="col-12">
+            <div class="er-wrap">
+                <h1>Your order has been placed</h1>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 col-md-6">
+            <div class="er-list-wrap">
+                <p class="text-left">
+                    <span class="er-bold">Order Number:</span>
+                    <span class="er-small">{{ order.order_number }}</span>
+                </p>
+                <p class="text-left">
+                    <span class="er-bold">Your order will be shipped to:</span><br><br>
+                    {{ order.user.first_name }} {{ order.user.last_name }}<br>
+                    {{ order.address1 }}<br>
+                    {% if order.adress2 %}
+                    {{ order.address2 }}<br>
+                    {% endif %}
+                    {{ order.postcode }},
+                    {{ order.city }}<br>
+                    {{ order.country }}
+                </p>
+                <br>
+                {% if order.sent %}
+                <p class="text-left">This order was sent on {{ order.sent_date }}</p>
+                {% else %}
+                <p class="text-left">You will receive an e-mail notification with tracking information once the
+                    order has been sent.</p>
+                {% endif %}
+            </div>
+        </div>
+
+
+        <div class="col-12 col-md-6">
+            <div class="row er-list-wrap">
+                {% for item in ordered_items %}
+                <div class="col-12 col-md-6">
+                    <a href="{% url 'shop:shop_details' pk=item.work_item.id %}" title="View this shop item">
+                        <div class="er-image">
+                            <img src="{{ MEDIA_URL }}{{ item.work_item.main_image }}" alt="{{ item.work.title }}">
+                        </div>
+                    </a>
+                </div>
+                <div class="col-12 col-md-6">
+                    <a href="{% url 'shop:shop_details' pk=item.work_item.id %}" title="View this shop item">
+
+                        <h5 class="text-left">{{ item.work_item.title }}</h5>
+                        <p>
+                            {{ item.work_item.shop_settings.work_type }}<br>
+                            {{ item.work_item.shop_settings.work_size }}
+                        </p>
+                        <p class="text-left er-bold">
+
+                        </p>
+
+                    </a>
+                </div>
+                <div class="col-9">
+                    <p class="text-right">Quantity {{ item.quantity }}:</p>
+                </div>
+                <div class="col-3">
+                    <p class="text-right er-bold">
+                        {{ item.price }} <i class="fas fa-euro-sign"></i>
+                    </p>
+                </div>
+                <div class="col-12">
+                    <p>
+                        <hr>
+                    </p>
+                </div>
+                {% endfor %}
+                <!-- Show total and shipping costs -->
+                <div class="col-9">
+                    <p class="text-right">Shipping:</p>
+                </div>
+                <div class="col-3">
+                    <p class="text-right er-bold"> {{ order.shipping }} <i class="fas fa-euro-sign"></i></p>
+                </div>
+                <div class="col-9">
+                    <p class="text-right">Total:</p>
+                </div>
+                <div class="col-3">
+                    <p class="text-right er-bold"> {{ order.total }} <i class="fas fa-euro-sign"></i></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</section>
+
+<!-- Main menu highlite shop -->
+<script>
+    $('#er-shop-active').addClass('active');
+</script>
+<!-- Load special screen events (rotate arrow dropdown) -->
+<script src="{% static 'js/dropdown-events.js' %}"></script>
+{% endblock %}
