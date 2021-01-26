@@ -20,7 +20,9 @@ def all_shop_works(request):
             message = None
     except:
         message = None
-    works = work_items.objects.filter().order_by('shop_settings__sort_order', 'id')
+        # Get all works for the shop
+    works = work_items.objects.filter(
+        shop_item=True).order_by('shop_settings__sort_order', 'id')
     shop_filter_form = ShopFilterForm()
 
     if request.method == "POST":
@@ -59,9 +61,7 @@ def all_shop_works(request):
                                                       "shop_filter_form": shop_filter_form,
                                                       'title': 'Viewing: ' + title})
 
-    # Get all works for the shop
-    works = work_items.objects.filter(
-        shop_item=True).order_by('shop_settings__sort_order', 'id')
+
     title = 'Viewing all works'
     return render(request, "shopworks.html", {"works": works,
                                               "shop_filter_form": shop_filter_form,
