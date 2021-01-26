@@ -6,16 +6,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lobke van Aar</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha256-L/W5Wfqfa0sdBNIKN9cG6QA5F2qx4qICmU2VgLruv9Y=" crossorigin="anonymous" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" integrity="sha256-h20CPZ0QyXlBuAw7A+KluUYx/3pK+c7lYEpqLTlxjYQ=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha256-L/W5Wfqfa0sdBNIKN9cG6QA5F2qx4qICmU2VgLruv9Y=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css"
+        integrity="sha256-h20CPZ0QyXlBuAw7A+KluUYx/3pK+c7lYEpqLTlxjYQ=" crossorigin="anonymous" />
 
     <link rel="stylesheet" href="{% static 'MyFonts/MyFontsWebfontsKit.css' %}">
     <link rel="stylesheet" href="{% static 'css/custom.css' %}">
     <link rel="icon" type="image/ico" href="{% static 'images/favicon.ico' %}">
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js" integrity="sha256-/ijcOLwFf26xEYAjW75FizKVo5tnTYiQddPZoLUHHZ8=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha256-WqU1JavFxSAMcLP2WIOI+GB2zWmShMI82mTpLDcqFUg=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"
+        integrity="sha256-/ijcOLwFf26xEYAjW75FizKVo5tnTYiQddPZoLUHHZ8=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha256-WqU1JavFxSAMcLP2WIOI+GB2zWmShMI82mTpLDcqFUg=" crossorigin="anonymous"></script>
 
 
     <!-- Text needed for the licensed font used in this project -->
@@ -58,7 +63,9 @@
         <div class="row">
             <nav class="navbar fixed-top navbar-expand-md navbar-light">
                 <!-- Button for mobile menu -->
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup, #er-collapse-filter, #er-shop-filters" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-toggle="collapse"
+                    data-target="#navbarNavAltMarkup, #er-collapse-filter, #er-shop-filters"
+                    aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
@@ -66,13 +73,20 @@
                     <!-- Center menu -->
                     <div class="col-md-4 order-2">
                         <div class="navbar-nav er-nav-links er-links-center">
+                            <div id="er-works-active">
+                                <a id="er-works-active" href="{% url 'all_works' %}"
+                                    title="Portfolio"><span>WORK</span></a>
+                            </div>
+                            <div id="er-about-active">
 
-                            <a class="nav-item nav-link" id="er-works-active" href="{% url 'all_works' %}" title="Portfolio">WORK</a>
+                                <a id="er-about-active" href="{% url 'about:about' %}"
+                                    title="About"><span>ABOUT</span></a>
+                            </div>
+                            <div id="er-shop-active">
 
-                            <a class="nav-item nav-link" id="er-about-active" href="{% url 'about:about' %}" title="About">ABOUT</a>
-
-                            <a class="nav-item nav-link" id="er-shop-active" href="{% url 'shop:all_shop_works' %}?info=show" title="Webshop">SHOP</a>
-
+                                <a id="er-shop-active" href="{% url 'shop:all_shop_works' %}?info=show"
+                                    title="Webshop"><span>SHOP</span></a>
+                            </div>
                         </div>
                     </div>
 
@@ -81,20 +95,24 @@
                         {% if request.user.is_staff %} {# Only show admin links to staff #}
                         <div class="navbar-nav er-nav-links" id="er-admin-links">
                             <div>
-                                <div class="er-nav-button">
-                                    <a class="nav-item nav-link" href="{% url 'dashboard:add_works' %}" title="Add a new work"><i class="fas fa-plus"></i> Work</a>
+                                <div class="er-button er-nav-button">
+                                    <a href="{% url 'dashboard:add_works' %}" title="Add a new work"><i
+                                            class="fas fa-plus"></i> Work</a>
                                 </div>
                                 <br class="d-sm-none">
-                                <div class="er-nav-button">
-                                    <a class="nav-item nav-link" href="{% url 'dashboard:list_works' %}" title="Edit works"><i class="fas fa-edit"></i> Works</a>
+                                <div class="er-button er-nav-button">
+                                    <a href="{% url 'dashboard:list_works' %}" title="Edit works"><i
+                                            class="fas fa-edit"></i> Works</a>
                                 </div>
                                 <br class="d-sm-none">
-                                <div class="er-nav-button">
-                                    <a class="nav-item nav-link" href="{% url 'dashboard:list_orders' %}" title="View orders"><i class="fas fa-shopping-cart"></i> Orders</a>
+                                <div class="er-button er-nav-button">
+                                    <a href="{% url 'dashboard:list_orders' %}" title="View orders"><i
+                                            class="fas fa-shopping-cart"></i> Orders</a>
                                 </div>
                                 <br class="d-sm-none">
-                                <div class="er-nav-button">
-                                    <a class="nav-item nav-link" href="{% url 'dashboard:edit_settings' %}" title="Edit shop settings"><i class="fas fa-cogs"></i> Settings</a>
+                                <div class="er-button er-nav-button">
+                                    <a href="{% url 'dashboard:edit_settings' %}" title="Edit shop settings"><i
+                                            class="fas fa-cogs"></i> Settings</a>
                                 </div>
                                 <br class="d-sm-none">
                             </div>
@@ -110,29 +128,36 @@
 
                                 <!-- Cart button -->
                                 {% if request.session.cart %} {# Show only when something is in the cart #}
-                                <div class="er-nav-button">
-                                    <a class="nav-item nav-link" href="{% url 'cart:view_cart' %}?next={{ request.path|urlencode }}" title="View shopping cart"><i class="fas fa-shopping-cart"></i> <span
-                                            class="er-cart-count">{{ request.session.cart|length }}</span></a>
+                                <div class="er-button er-nav-button">
+                                    <a href="{% url 'cart:view_cart' %}?next={{ request.path|urlencode }}"
+                                        title="View shopping cart"><i class="fas fa-shopping-cart"></i> <span
+                                            class="er-cart-count">{{ product_count }}</span></a>
                                 </div>
                                 {% endif %} {% if request.user.is_authenticated %} {# Show only when logged in #}
                                 <!-- Profile button -->
-                                <div class="er-nav-button">
-                                    <a class="nav-item nav-link" href="{% url 'accounts:user_profile' %}?next={{ request.path|urlencode }}" title="See your profile"><i class="fas fa-user"></i> Profile</a>
+                                <div class="er-button er-nav-button">
+                                    <a href="{% url 'accounts:user_profile' %}?next={{ request.path|urlencode }}"
+                                        title="See your profile"><i class="fas fa-user"></i> Profile</a>
                                 </div>
                                 <!-- Log-out button -->
-                                <div class="er-nav-button">
-                                    <a class="nav-item nav-link" href="{% url 'accounts:log_out' %}?next={{ request.path|urlencode }}" title="Log out"><i class="fas fa-sign-out-alt"></i> Log-out</a>
+                                <div class="er-button er-nav-button">
+                                    <a href="{% url 'accounts:log_out' %}?next={{ request.path|urlencode }}"
+                                        title="Log out"><i class="fas fa-sign-out-alt"></i> Log-out</a>
                                 </div>
-                                {% endif %} {% if not request.user.is_authenticated %} {# Show only when no user is logged in #}
+                                {% endif %}
+                                {% if not request.user.is_authenticated %} {# Show only when no user is logged in #}
                                 <!-- Register button -->
-                                <div class="er-nav-button">
-                                    <a class="nav-item nav-link" href="{% url 'accounts:register_user' %}?next={{ request.path|urlencode }}" title="Register as a new customer">
+                                <div class="er-button er-nav-button">
+                                    <a href="{% url 'accounts:register_user' %}?next={{ request.path|urlencode }}"
+                                        title="Register as a new customer">
                                         <i class="fas fa-user-plus"></i> Register</a>
                                 </div>
                                 <!-- Log-in button -->
-                                <div class="er-nav-button">
-                                    <a class="nav-item nav-link" href="{% url 'accounts:log_in' %}?next={{ request.path|urlencode }}" title="Log in to use the shop">
-                                        <i class="fas fa-sign-in-alt"></i> Log-in<span class="sr-only">(current)</span></a>
+                                <div class="er-button er-nav-button">
+                                    <a href="{% url 'accounts:log_in' %}?next={{ request.path|urlencode }}"
+                                        title="Log in to use the shop">
+                                        <i class="fas fa-sign-in-alt"></i> Log-in<span
+                                            class="sr-only">(current)</span></a>
                                 </div>
                                 {% endif %}
 
@@ -148,29 +173,33 @@
 
                     {% if request.session.cart %} {# Show only when something is in the cart #}
                     <!-- Profile button -->
-                    <div class="er-nav-button er-cart-button">
-                        <a class="nav-item nav-link" href="{% url 'cart:view_cart' %}?next={{ request.path|urlencode }}" title="View shopping cart"><i class="fas fa-shopping-cart"></i> <span
+                    <div class="er-button er-nav-button er-cart-button">
+                        <a href="{% url 'cart:view_cart' %}?next={{ request.path|urlencode }}"
+                            title="View shopping cart"><i class="fas fa-shopping-cart"></i> <span
                                 class="er-cart-count">{{ request.session.cart|length }}</span></a>
                     </div>
                     {% endif %} {% if not request.user.is_authenticated %} {# Show only when no user is logged in #}
                     <!-- Log-in button -->
-                    <div class="er-nav-button er-log-button">
-                        <a class="nav-item nav-link" href="{% url 'accounts:log_in' %}?next={{ request.path|urlencode }}" title="Log in to use the shop">
+                    <div class="er-button er-nav-button er-log-button">
+                        <a href="{% url 'accounts:log_in' %}?next={{ request.path|urlencode }}"
+                            title="Log in to use the shop">
                             <i class="fas fa-sign-in-alt"></i> Log-in<span class="sr-only">(current)</span></a>
                     </div>
                     <!-- Register button -->
-                    <div class="er-nav-button er-profile-button">
-                        <a class="nav-item nav-link" href="{% url 'accounts:register_user' %}?next={{ request.path|urlencode }}" title="Register as a new customer">
+                    <div class="er-button er-nav-button er-profile-button">
+                        <a href="{% url 'accounts:register_user' %}?next={{ request.path|urlencode }}"
+                            title="Register as a new customer">
                             <i class="fas fa-user-plus"></i> Register</a>
                     </div>
                     {% endif %} {% if request.user.is_authenticated %} {# Show only when logged in #}
                     <!-- Profile button -->
-                    <div class="er-nav-button er-profile-button">
-                        <a class="nav-item nav-link" href="{% url 'accounts:user_profile' %}?next={{ request.path|urlencode }}" title="See your profile"><i class="fas fa-user"></i> Profile</a>
+                    <div class="er-button er-nav-button er-profile-button">
+                        <a href="{% url 'accounts:user_profile' %}?next={{ request.path|urlencode }}"
+                            title="See your profile"><i class="fas fa-user"></i> Profile</a>
                     </div>
                     <!-- Log-out button -->
-                    <div class="er-nav-button er-log-button">
-                        <a class="nav-item nav-link" href="{% url 'accounts:log_out' %}?next={{ request.path|urlencode }}" title="Log out"><i
+                    <div class="er-button er-nav-button er-log-button">
+                        <a href="{% url 'accounts:log_out' %}?next={{ request.path|urlencode }}" title="Log out"><i
                                 class="fas fa-sign-out-alt"></i> Log-out</a>
                     </div>
                     {% endif %}
@@ -220,7 +249,8 @@
                     <div class="er-footer-wrap">
                         <p>
                             <a href="tel:+31651199420" title="Call lobke van aar">+31 6 511 99 420</a> -
-                            <a href="mailto:info@lobkevanaar" title="Sent email to lobke van aar">info@lobkevanaar.nl</a>
+                            <a href="mailto:info@lobkevanaar"
+                                title="Sent email to lobke van aar">info@lobkevanaar.nl</a>
                         </p>
                     </div>
                 </div>
@@ -228,7 +258,8 @@
                 <div class="col-2 order-2 col-md-1 order-md-1 col-lg-1 order-lg-2 er-footer-col">
                     <div class="er-footer-wrap">
                         <p>
-                            <a href="https://www.facebook.com/lobkevanaar/" target="blank" title="Lobke van Aar - Facebook page">
+                            <a href="https://www.facebook.com/lobkevanaar/" target="blank"
+                                title="Lobke van Aar - Facebook page">
                                 <i class="fab fa-facebook-f"></i>
                             </a>
 
@@ -251,7 +282,8 @@
                     <div class="er-footer-wrap">
                         <p>
 
-                            <a href="https://www.instagram.com/lobkevanaar/" target="blank" title="Lobke van Aar - instagram page">
+                            <a href="https://www.instagram.com/lobkevanaar/" target="blank"
+                                title="Lobke van Aar - instagram page">
                                 <i class="fab fa-instagram"></i>
                             </a>
                         </p>

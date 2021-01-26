@@ -43,27 +43,32 @@
 
     <div class="row">
         <div class="col-12">
-            <h2>{{ title }}</h2>
+            <h1>{{ title }}</h1>
         </div>
     </div>
     <!-- Show all shop items -->
     <div class="row">
         {% for work in works %}
-        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3" id="er-shop-{{ work.pk }}">
+            <a href="{% url 'shop:shop_details' pk=work.id %}?next={{ request.path|urlencode }}"
+                title="View this shop item">
+                <div class="er-shop-wrap">
+                    <!-- Slide out item details on hover -->
+                    <script>
+                        $('#er-shop-{{ work.pk }}').hover(
+                            function () {
+                                $('#er-plus-{{ work.pk }}').addClass('er-show-plus');
 
-            {% if work.shop_settings.on_sale %}
-            {# Show discount banner when item on sale #}
-            <div class="er-discount">-{{ work.shop_settings.discount }}%</div>
-            {% endif %}
-
-            <div class="er-shop-wrap">
-                <div class="er-shop-top">
-                    <h5>{{ work.title }}</h5>
-                </div>
-                <!-- Main image -->
-                <div class="er-image-wrap">
-                    <a href="{% url 'shop:shop_details' pk=work.id %}?next={{ request.path|urlencode }}"
-                        title="View this shop item">
+                            }, function () {
+                                $('#er-plus-{{ work.pk }}').removeClass('er-show-plus');
+                            })
+                    </script>
+                    {% if work.shop_settings.on_sale %}
+                    {# Show discount banner when item on sale #}
+                    <div class="er-discount">-{{ work.shop_settings.discount }}%</div>
+                    {% endif %}
+                    <!-- Main image -->
+                    <div class="er-image-wrap">
                         {% if work.shop_settings.main_image %}
                         {# check if a custom main image was set #}
                         <div class="er-shop-image"
@@ -73,46 +78,58 @@
                         <div class="er-shop-image" style="background-image: url({{ MEDIA_URL }}{{ work.main_image }});">
                         </div>
                         {% endif %}
+                        <div>
+                            <h5 class="text-center er-small">{{ work.title }}</h5>
+                        </div>
+                        <div class="er-plus-wrap">
+                            <div class="er-shop-plus" id="er-plus-{{ work.pk }}">
+                                <ul class="text-left er-smaller">
+                                    <li>
+                                        {{ work.shop_settings.work_type }}
+                                    </li>
+                                    <li>
+                                        {{ work.shop_settings.work_size }}
+                                    </li>
+                                    <li>
+                                        {{ work.shop_settings.material }}
+                                    </li>
+                                </ul>
+                                <table>
+                                    <tr>
+                                        <td class="er-price-cell">
+                                            {% if work.shop_settings.on_sale %} {# Show discounted price if on_sale #}
+                                            <span>
+                                                {{ work.shop_settings.discount_price }} <i class="fas fa-euro-sign"></i>
+                                            </span>
+                                            <span>
+                                                <del class="er-strike-price">
+                                                    <i class="fas fa-euro-sign"></i>
+                                                    {{ work.shop_settings.price }}
+                                                </del>
+                                            </span>
 
-                    </a>
-                </div>
-                <div>
-                    <p class="text-center">{{ work.shop_settings.work_type }}</p>
-                    <div>
-                        <table>
-                            <tr>
-                                <td class="er-price-cell">
-                                    {% if work.shop_settings.on_sale %}
-                                    {# Show discounted price if applicable #}
-                                    <span>
-                                        {{ work.shop_settings.discount_price }}
-                                        <i class="fas fa-euro-sign"></i>
-                                        <del class="er-strike-price">
-                                            {{ work.shop_settings.price }} <i class="fas fa-euro-sign"></i>
-                                        </del>
-                                    </span>
-                                    {% else %}
-                                    <span> {{ work.shop_settings.price }} <i class="fas fa-euro-sign"></i></span>
-                                    {% endif %}
-
-                                </td>
-                                <td class="er-cart-cell">
-                                    <a href="{% url 'cart:add_cart' id=work.pk %}?next={{ request.path|urlencode }}"
-                                        title="Add item to shopping cart">
-                                        <div class="er-nav-button er-shop-button">
-                                            <i class="fas fa-plus"></i>
-                                            <i class="fas fa-shopping-cart"></i>
-                                        </div>
-                                    </a>
-                                </td>
-                            </tr>
-                        </table>
+                                            {% else %}
+                                            <span>{{ work.shop_settings.price }} <i class="fas fa-euro-sign"></i></span>
+                                            {% endif %}
+                                        </td>
+                                        <td class="er-cart-cell">
+                                            <a
+                                                href="{% url 'cart:add_cart' id=work.pk %}?next={{ request.path|urlencode }}">
+                                                <div class="er-button er-shop-button">
+                                                    <i class="fas fa-shopping-cart"></i>
+                                                    <i class="fas fa-plus"></i>
+                                                </div>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </a>
         </div>
         {% endfor %}
-
     </div>
 </section>
 

@@ -22,9 +22,6 @@
 
                     <!-- Get all extra images and create thumbs to view them -->
                     <div class="er-image-select">
-
-
-
                         <!-- First thumb is the main image -->
                         <div class="er-select-thumb" id="er-main-select"
                             style="background-image: url({{ MEDIA_URL }}{{ work.main_image }});">
@@ -49,84 +46,108 @@
                     </div>
                 </div>
                 <div class="col-12 order-3 col-md-5 col-lg-6 order-sm-2">
-                    <div class="er-shop-top">
-                        <h1>{{ work.title }}</h1>
-                        <p>{{ work.under_title }}</p>
-                    </div>
+
                     <!-- Show item description -->
                     <div class="er-shop-body">
-                        {% if work.shop_settings.personal_text %}
-                        {# if selected show personal text #}
-                        <p>
-                            {{ work.shop_settings.personal_message }}
-                        </p>
-                        {% endif %}
+                        <table>
+                            <tr>
+                                <td class="er-shop-top er-td-middle">
+                                    <h1 class="text-left">{{ work.title }}</h1>
+                                    <p class="text-left">{{ work.under_title }}</p>
+                                </td>
+                            </tr>
+                            {% if work.shop_settings.personal_text %}
+                            {# if selected show personal text #}
+                            <tr>
+                                <td class="er-td-middle">
+                                    <p>
+                                        {{ work.shop_settings.personal_message }}
+                                    </p>
+                                </td>
+                            </tr>
+                            {% endif %}
+                            {% if work.shop_settings.standard_text %}
+                            {# if selected show generated text #}
+                            <tr>
+                                <td class="er-td-middle">
+                                    <p>
+                                        {{ work.shop_settings.work_type }} {{ work.shop_settings.material }} with a size
+                                        of
+                                        {{ work.shop_settings.work_size }}.
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="er-td-middle">
+                                    <p>
+                                        {% if not work.shop_settings.edition_count == 0 %}Limited edition of
+                                        {{ work.shop_settings.edition_count }}
+                                        {% endif %} Printed in the Netherlands. Signed and
+                                        numbered by yours truly.
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="er-td-middle">
+                                    <p class="text-left">
+                                        {% if work.shop_settings.frame == 'NF' %} The frame is not included.{% endif %}
+                                        {% if work.shop_settings.frame == 'FR' %} The frame is included.{% endif %}
+                                    </p>
+                                </td>
+                            </tr>
+                            {% endif %}
+                            <tr>
+                                <td class="er-td-middle">
+                                    <table>
+                                        <tr>
+                                            <td class="er-price-cell">
+                                                {% if work.shop_settings.on_sale %}
+                                                {# When on sale show discounted price#}
+                                                <span>
+                                                    {{ work.shop_settings.discount_price }}
+                                                    <i class="fas fa-euro-sign"></i>
+                                                    <del class="er-strike-price">
+                                                        {{ work.shop_settings.price }} <i class="fas fa-euro-sign"></i>
+                                                    </del>
+                                                </span>
+                                                {% else %}
+                                                <span>{{ work.shop_settings.price }} <i
+                                                        class="fas fa-euro-sign"></i></span>
+                                                {% endif %}
+                                            </td>
 
-                        {% if work.shop_settings.standard_text %}
-                        {# if selected show generated text #}
-                        <div>
-                            <p>
-                                {{ work.shop_settings.work_type }} {{ work.shop_settings.material }} with a size of
-                                {{ work.shop_settings.work_size }}.
-                            </p>
-                        </div>
-                        <div>
-                            <p>
-                                {% if not work.shop_settings.edition_count == 0 %}Limited edition of
-                                {{ work.shop_settings.edition_count }}
-                                {% endif %} Printed in the Netherlands. Signed and
-                                numbered by yours truly.
-                            </p>
-                        </div>
-                        <div>
-                            <p class="text-left">
-                                {% if work.shop_settings.frame == 'NF' %} The frame is not included.{% endif %}
-                                {% if work.shop_settings.frame == 'FR' %} The frame is included.{% endif %}
-                            </p>
-                        </div>
-                        {% endif %}
+                                            <td class="er-cart-cell">
+                                                <a href="{% url 'cart:add_cart' id=work.pk %}?next={{ request.path|urlencode }}"
+                                                    title="Add item to shopping cart">
+                                                    <div class="er-button er-shop-button">
+                                                        <i class="fas fa-plus"></i>
+                                                        <i class="fas fa-shopping-cart"></i>
+                                                    </div>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+
+                        </table>
+
+
+
+
                     </div>
-                    <table>
-                        <tr>
-                            <td class="er-price-cell">
-                                {% if work.shop_settings.on_sale %}
-                                {# When on sale show discounted price#}
-                                <span>
-                                    {{ work.shop_settings.discount_price }}
-                                    <i class="fas fa-euro-sign"></i>
-                                    <del class="er-strike-price">
-                                        {{ work.shop_settings.price }} <i class="fas fa-euro-sign"></i>
-                                    </del>
-                                </span>
-                                {% else %}
-                                <span>{{ work.shop_settings.price }} <i class="fas fa-euro-sign"></i></span>
-                                {% endif %}
-                            </td>
 
-                            <td class="er-cart-cell">
-                                <a href="{% url 'cart:add_cart' id=work.pk %}?next={{ request.path|urlencode }}"
-                                    title="Add item to shopping cart">
-                                    <div class="er-nav-button er-shop-button">
-                                        <i class="fas fa-plus"></i>
-                                        <i class="fas fa-shopping-cart"></i>
-                                    </div>
-                                </a>
-                            </td>
-                        </tr>
-                    </table>
+
+
+
+
+
+
                 </div>
-
-
-
-
-
-
 
             </div>
 
         </div>
-
-    </div>
     </div>
 </section>
 
