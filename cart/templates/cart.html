@@ -13,8 +13,7 @@
     </div>
     <!-- Show all items in the cart -->
     <div class="row">
-        <div class="col-12 col-md-6 col-lg-5 offset-lg-1">
-
+        <div class="col-12 col-md-6">
             {% for item in cart_items %}
             <div class="row er-list-wrap">
                 <div class="col-6">
@@ -57,7 +56,7 @@
                                 <td class="er-cart-cell">
                                     <a
                                         href="{% url 'cart:add_cart' id=item.work.pk %}?next={{ request.path|urlencode }}">
-                                        <div class="er-nav-button er-shop-button">
+                                        <div class="er-button er-shop-button">
                                             <i class="fas fa-plus"></i>
                                             <i class="fas fa-shopping-cart"></i>
                                         </div>
@@ -66,7 +65,7 @@
                                 <td class="er-cart-cell">
                                     <a
                                         href="{% url 'cart:remove_cart' id=item.work.pk %}?next={{ request.path|urlencode }}">
-                                        <div class="er-nav-button er-shop-button">
+                                        <div class="er-button er-shop-button">
                                             <i class="fas fa-minus"></i>
                                             <i class="fas fa-shopping-cart"></i>
                                         </div>
@@ -107,23 +106,33 @@
             </div>
         </div>
         <!-- message from site owner -->
-        <div class="col-12 col-md-6 col-lg-5">
+        <div class="col-12 col-md-6">
             <div class="er-info-wrap">
 
                 <h2>Thank you for your interest!</h2>
-                <p>Clicking 'proceed to checkout' will take you to the registration page to enter your address details,
-                    so we can determine the shipping costs.</p>
-                <p> If you already
+                <p>
+                    Clicking <a href="{% url 'checkout:check_out' %}?next={{ request.path|urlencode }}"
+                        title="Proceed to checkout">proceed to checkout</a> will take you to the registration page to
+                    enter your address details,
+                    so we can determine the shipping costs.
+                </p>
+                <p>
+                    If you already
                     have an account you can log in <a
                         href="{% url 'accounts:log_in' %}?next={{ request.path|urlencode }}"
-                        title="Log in to use the shop">here.</a></p>
-                <p>The shipping costs will be calculated on the
-                    checkout page based on your region. At the moment only credit card payments are possible</p>
-                <p> If there's anything you would want to change or inform me about,
-                    please do not hesitate to send me an email.</p>
-                <p class="text-center"><a href="mailto:info@lobkevanaar"
-                        title="Sent email to lobke van aar">info@lobkevanaar.nl</a></p>
-
+                        title="Log in to use the shop">here.</a>
+                </p>
+                <p>
+                    The shipping costs will be calculated on the
+                    checkout page based on your region. At the moment only credit card payments are possible
+                </p>
+                <p>
+                    If there's anything you would want to change or inform me about,
+                    please do not hesitate to send me an email.
+                </p>
+                <p class="text-right">
+                    <a href="mailto:info@lobkevanaar" title="Sent email to lobke van aar">info@lobkevanaar.nl</a>
+                </p>
             </div>
         </div>
     </div>
