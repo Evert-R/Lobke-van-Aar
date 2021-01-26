@@ -49,6 +49,34 @@ def user_profile(request):
                    'next': next
                    })
 
+@login_required
+def view_order(request, order_number):
+    """
+    Renders user order view page
+    """
+    try:
+        next = request.GET.get('next', '/')
+    except:
+        next = 'accounts:profile'
+    # Get active user
+    active_user = request.user
+    try:
+        print(order_number)
+        order = orders.objects.get(order_number=order_number)
+        
+    except:        
+        messages.error(request, "This order does not exist")
+        return redirect(next)
+    if order.user != active_user:
+        messages.error(request, "You are not allowed to view this order")
+        return redirect(next)
+    ordered_items = order_items.objects.filter(order=order)
+    return render(request, 'userorder.html',
+                  {'order': order,
+                  'ordered_items': ordered_items,
+                  'next': next
+                  })
+
 
 @login_required
 def update_user(request):
@@ -67,7 +95,6 @@ def update_user(request):
 
 def register_user(request):
     """Register new users"""
-
     # Get request origin to pass to the form
     next = request.GET.get('next', '/')
     accounts_form = RegisterForm()
@@ -99,11 +126,11 @@ def register_user(request):
 
 @login_required
 def add_user_details(request, next):
+    """Add or edit user details"""
     # Check if next was provided as variable
     if next == None:
         # If not get request origin
-        next = request.GET.get('next', '/')
-    """Add or edit user details"""
+        next = request.GET.get('next', '/')    
     # Get active user
     active_user = request.user
     # Check if details already exist
@@ -173,7 +200,6 @@ def log_in(request):
 @login_required
 def log_out(request):
     """Log out user"""
-
     # Get request origin
     next = request.GET.get('next', '/')
     # Log user out

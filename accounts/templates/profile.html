@@ -14,55 +14,31 @@
     <div class="row">
         <div class="col-lg-6">
             <div class="d-none d-lg-block er-wrap">
-                <h3>User details:</h3>
+                <h3>Account information:</h3>
             </div>
             <!-- User details -->
-            <div class="er-info-wrap er-fat-info">
-
-                <table class="table-hover">
-                    <tr>
-                        <td>
-                            {{ active_user.first_name }} {{ active_user.last_name }}
-                        </td>
-                        <td class="text-right">
-                            {{ active_user.email }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            {{ user_details.address1 }}
-                        </td>
-                        <td class="text-right">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
+            <div class="er-info-wrap">
+                <div class="row">
+                    <div class="col-6">
+                        <p>
+                            <span class="er-small">{{ active_user.first_name }} {{ active_user.last_name }}</span><br>
+                            <span class="er-small">{{ user_details.address1 }}</span><br>
                             {% if user_details.address2 %}
-                            {{ user_details.address2 }}
+                            <span class="er-small">{{ user_details.address2 }}</span><br>
                             {% endif %}
-                        </td>
-                        <td class="text-right">
-                            {{ user_details.telephone }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            {{ user_details.postcode }}
-                        </td>
-                        <td>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            {{ user_details.country }}
-                        </td>
-                        <td class="text-right">
-                            Ship to: {{ user_details.shipping.region }}
-                        </td>
-                    </tr>
-                </table>
-
-
+                            <span class="er-small">{{ user_details.postcode }}</span><br>
+                            <span class="er-small">{{ user_details.city }}, {{ user_details.country }}</span><br>
+                        </p>
+                    </div>
+                    <div class="col-6">
+                        <p class="text-right">
+                            <span class="er-small text-right">{{ user_details.telephone }}</span><br>
+                            <span class="er-small text-right">{{ active_user.email }}</span><br>
+                            <span class="er-small text-right">Shipping region:<br>
+                                {{ user_details.shipping.region }}</span><br>
+                        </p>
+                    </div>
+                </div>
             </div>
             <!-- User details form -->
             <div class="er-form-wrap">
@@ -97,121 +73,37 @@
         <!-- Orders of active user -->
         <div class="col-lg-6">
             <div class="er-wrap">
-                <h3 class="text-right">Your orders:</h3>
+                <h3 class="text-right">Order history:</h3>
             </div>
             {% if not orders %}
             <div class="er-wrap">
                 <h2 class="text-center">No orders to show yet</h2>
             </div>
             {% endif %}
-            {% for order in orders %}
-            <div class="er-form-wrap">
-                <a data-toggle="collapse" href="#order{{order.pk}}">
-                    <h2 class="er-drop-down"><i class="fas fa-angle-down"></i> {{ order.date }}</h2>
-                </a>
-            </div>
-            <div class="collapse" id="order{{order.pk}}">
-                <div class="row er-info-wrap">
-                    <div class="col-6">
-                        <h2 class="text-left">Ship to:</h2>
-                        <p class="text-left">
 
-                            {{ user.first_name }} {{ user.last_name }}<br>
-                            {{ order.address1 }}<br>
-                            {% if order.adress2 %}
-                            {{ order.address2 }}<br>
+            <div class="er-wrap">
+                {% for order in orders %}
+                <a href="{% url 'accounts:view_order' order.order_number %}?next={% url 'accounts:user_profile' %}"
+                    title="View this order">
+                    <div class="er-order-title er-smaller">
+                        <span class="er-smaller">Order date: {{ order.date }}</span>
+                        <div class="er-title-icon">
+                            {% if order.sent %}
+                            <i class="fas fa-shipping-fast"></i>
                             {% endif %}
-                            {{ order.postcode }},
-                            {{ order.city }}<br>
-                            {{ order.country }}
-                        </p>
-                    </div>
-                    <div class="col-6">
-                        <h2 class="text-right">Shipping: {{ order.shipping}} <i class="fas fa-euro-sign"></i></h2>
-                        <h2 class="text-right">Total: {{ order.total}} <i class="fas fa-euro-sign"></i></h2>
-                    </div>
-
-                    <div class="col-12">
-                        <br>
-                        {% if order.sent %}
-                        <h2 class="text-center">This order was sent on {{ order.sent_date }}</h2>
-                        {% else %}
-                        <h2 class="text-center">This order has not been sent yet</h2>
-                        {% endif %}
-
-                    </div>
-                </div>
-                {% for item in ordered_items %}
-                {% if item.order.pk ==  order.pk %}
-                <div class="row er-list-wrap">
-                    <div class="col-6">
-                        <a href="{% url 'shop:shop_details' pk=item.work_item.id %}" title="View this shop item">
-                            <div class="er-image">
-                                <img src="{{ MEDIA_URL }}{{ item.work_item.main_image }}" alt="{{ item.work.title }}">
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-6">
-                        <a href="{% url 'shop:shop_details' pk=item.work_item.id %}" title="View this shop item">
-                            <div class="er-list-wrap">
-                                <h5 class="text-left">{{ item.work_item.title }}</h5>
-                                <p>
-                                    {{ item.work_item.shop_settings.work_type }}<br>
-                                    {{ item.work_item.shop_settings.work_size }}
-                                </p>
-                                <p class="er-quantity">
-                                    Quantity: {{ item.quantity }}
-                                </p>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-6">
-                    </div>
-                    <div class="col-6">
-                        <div>
-                            <table>
-                                <tr>
-                                    <td class="er-price-cell">
-
-                                        <span>{{ item.price }} <i class="fas fa-euro-sign"></i></span>
-
-                                    </td>
-
-                                </tr>
-                            </table>
+                            {% if order.paid %}
+                            {% if order.pay_method == 'ideal' %}
+                            <i class="fab fa-ideal"></i>
+                            {% endif %}
+                            {% if order.pay_method == 'card' %}
+                            <i class="fas fa-credit-card"></i>
+                            {% endif %}
+                            {% endif %}
                         </div>
                     </div>
-
-                    <div class="col-12">
-                        <p>
-                            <hr>
-                        </p>
-                    </div>
-                </div>
-                {% endif %}
+                </a>
                 {% endfor %}
-                <!-- Show total and shipping costs -->
-                <div class="row">
-                    <div class="col-6 er-checkout-left">
-                        <p>Shipping :</p>
-                    </div>
-                    <div class="col-6 er-checkout-right">
-                        <p>{{ order.shipping }} <i class="fas fa-euro-sign"></i></p>
-                    </div>
-                    <div class="col-12">
-                        <p>
-                            <hr>
-                        </p>
-                    </div>
-                    <div class="col-6 er-checkout-left">
-                        <p>Total :</p>
-                    </div>
-                    <div class="col-6 er-checkout-right">
-                        <p>{{ order.total }} <i class="fas fa-euro-sign"></i></p>
-                    </div>
-                </div>
             </div>
-            {% endfor %}
         </div>
     </div>
 </main>
