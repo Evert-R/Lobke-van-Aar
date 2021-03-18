@@ -97,12 +97,17 @@
                 {% endif %}
                 <!-- Shipping details -->
                 <td>
-                    <p class="text-center">
-                        {{ order.user.first_name }} {{ order.user.last_name }}<br>
+                    <p class="text-left">
+                        {{ order.full_name }}<br>
                         {{ order.address1 }}, {{ order.address2 }}<br>
                         {{ order.postcode }}, {{ order.city }}<br>
                         {{ order.country }}<br>
                     </p>
+                    {% if order.order_message %}
+                    <p class="text-left">
+                        {{ order.order_message }}
+                    </p>
+                    {% endif %}
                 </td>
                 <!-- Customer's email -->
                 <td>
@@ -112,8 +117,8 @@
                 </td>
 
                 <td>
-                    {{order.user.user_details.shipping.region}}<br>
-                    {{order.user.user_details.shipping.price }}
+                    {{order.region}}<br>
+                    {{order.shipping }}
                 </td>
             </tr>
         </table>
