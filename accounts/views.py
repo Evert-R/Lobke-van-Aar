@@ -30,7 +30,7 @@ def user_profile(request):
 
      # Check if this order exists
     try:
-        user_orders = orders.objects.filter(user=active_user)
+        user_orders = orders.objects.filter(user=active_user).order_by('-date')
 
     # if not show the list and rais an error message
     except:
