@@ -372,6 +372,9 @@
 
                     </th>
                     <th class="text-center">
+                        Work main
+                    </th>
+                    <th class="text-center">
                         Shop main
                     </th>
                     <th>
@@ -382,6 +385,12 @@
                     <td></td>
                     <td></td>
                     <td></td>
+                    <td class="er-list-button">
+                        <a href="{% url 'dashboard:unset_shop_image' pk=work.shop_settings.id %}?next={{ request.path|urlencode }}"
+                            title="Unset as Work default?">
+                            <button class="btn btn-primary er-red">Unset</button>
+                        </a>
+                    </td>
                     <td class="er-list-button">
                         {% if work.shop_settings %}
                         {# check if a shop item is already made #}
@@ -428,6 +437,12 @@
                             <img src="{{ MEDIA_URL }}{{ image.work_image }}" alt="{{work.title}}">
                         </a>
 
+                    </td>
+                    <td class="er-list-button">
+                        <a href="{% url 'dashboard:set_shop_image' pk=image.id %}?next={{ request.path|urlencode }}"
+                            title="Set as shop default?">
+                            <button class="btn btn-primary er-green">Set</button>
+                        </a>
                     </td>
                     <td class="er-list-button">
                         <a href="{% url 'dashboard:set_shop_image' pk=image.id %}?next={{ request.path|urlencode }}"
