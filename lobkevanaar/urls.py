@@ -19,13 +19,14 @@ from django.views import static
 from django.contrib.auth import views as auth_views
 from django.conf.urls.static import static
 from django.conf import settings
-from works import views
+from works.views import all_works
+from checkout.views import create_payment, payment_complete
 from accounts.forms import ResetPasswordForm, PasswordSetForm
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.all_works, name='all_works'),
+    path('', all_works, name='all_works'),
     path('works/', include('works.urls')),
     path('about/', include('about.urls')),
     path('shop/', include('shop.urls')),
@@ -55,6 +56,8 @@ urlpatterns = [
          auth_views.PasswordResetCompleteView.as_view(
              template_name='passwordset.html'),
          name="password_reset_complete"),
+
+    
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
