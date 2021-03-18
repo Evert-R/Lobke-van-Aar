@@ -15,78 +15,117 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-12 order-2 col-md-6 order-md-2">
+        <div class="col-12 col-md-6 order-md-2">
 
             <div class="er-form-wrap">
+                <form class="form-horizontal" method="post" id="er-change-shipping"
+                    action="{% url 'checkout:check_out' %}">
+                    {% crispy shipping_form %}
+                </form>
+
                 <form class="form-horizontal" id="er-complete">
                     {% csrf_token %}
                     <input type="hidden" id="order_number" value="{{order_number}}">
                     <input type="hidden" value="{{ client_secret }}" id="client_secret" name="client_secret">
+                    <div id="div_id_full_name" class="form-group row">
+                        <label for="id_full_name" class="col-form-label col-4 er-form-padding requiredField">
+                            Full name<span class="asteriskField">*</span>
+                        </label>
+                        <div class="col-8 er-form-padding">
+                            <input type="text" name="full_name" value="{{ user.first_name }} {{ user.last_name }}"
+                                maxlength="60" class="textinput textInput form-control" required="" id="full_name">
+                        </div>
+                    </div>
                     <div id="div_id_address1" class="form-group row">
-                        <label for="id_address1" class="col-form-label col-sm-4 er-form-padding requiredField">
+                        <label for="id_address1" class="col-form-label col-4 er-form-padding requiredField">
                             Address1<span class="asteriskField">*</span>
                         </label>
-                        <div class="col-sm-8 er-form-padding">
+                        <div class="col-8 er-form-padding">
                             <input type="text" name="address1" value="{{ user_details.address1 }}" maxlength="50"
                                 class="textinput textInput form-control" required="" id="address1">
                         </div>
                     </div>
                     <div id="div_id_address2" class="form-group row">
-                        <label for="id_address2" class="col-form-label col-sm-4 er-form-padding">
+                        <label for="id_address2" class="col-form-label col-4 er-form-padding">
                             Address2
                         </label>
-                        <div class="col-sm-8 er-form-padding">
+                        <div class="col-8 er-form-padding">
                             <input type="text" name="address2" value="{{ user_details.address2 }}" maxlength="50"
                                 class="textinput textInput form-control" id="address2">
                         </div>
                     </div>
                     <div id="div_id_postcode" class="form-group row">
-                        <label for="id_postcode" class="col-form-label col-sm-4 er-form-padding requiredField">
+                        <label for="id_postcode" class="col-form-label col-4 er-form-padding requiredField">
                             Postcode<span class="asteriskField">*</span>
                         </label>
-                        <div class="col-sm-8 er-form-padding">
+                        <div class="col-8 er-form-padding">
                             <input type="text" name="postcode" value="{{ user_details.postcode }}" maxlength="50"
                                 class="textinput textInput form-control" required="" id="postcode">
                         </div>
                     </div>
                     <div id="div_id_city" class="form-group row">
-                        <label for="id_city" class="col-form-label col-sm-4 er-form-padding requiredField">
+                        <label for="id_city" class="col-form-label col-4 er-form-padding requiredField">
                             City<span class="asteriskField">*</span>
                         </label>
-                        <div class="col-sm-8 er-form-padding">
+                        <div class="col-8 er-form-padding">
                             <input type="text" name="city" value="{{ user_details.city }}" maxlength="50"
                                 class="textinput textInput form-control" required="" id="city">
                         </div>
                     </div>
                     <div id="div_id_country" class="form-group row">
-                        <label for="id_country" class="col-form-label col-sm-4 er-form-padding requiredField">
+                        <label for="id_country" class="col-form-label col-4 er-form-padding requiredField">
                             Country<span class="asteriskField">*</span>
                         </label>
-                        <div class="col-sm-8 er-form-padding">
+                        <div class="col-8 er-form-padding">
                             <input type="text" name="country" value="{{ user_details.country }}" maxlength="50"
                                 class="textinput textInput form-control" required="" id="country">
                         </div>
                     </div>
                     <div id="div_id_telephone" class="form-group row">
-                        <label for="id_telephone" class="col-form-label col-sm-4 er-form-padding">
+                        <label for="id_telephone" class="col-form-label col-4 er-form-padding">
                             Telephone
                         </label>
-                        <div class="col-sm-8 er-form-padding">
+                        <div class="col-8 er-form-padding">
                             <input type="text" name="telephone" value="{{ user_details.telephone }}" maxlength="25"
                                 class="textinput textInput form-control" id="telephone">
                         </div>
                     </div>
                     <div id="div_id_shipping" class="form-group row">
-                        <label for="id_shipping" class="col-form-label col-sm-4 er-form-padding requiredField">
+                        <label for="id_shipping" class="col-form-label col-4 er-form-padding requiredField">
                             Shipping<span class="asteriskField">*</span>
                         </label>
-                        <div class="col-sm-8 er-form-padding">
-                            <select name="shipping" class="select form-control" required="" id="id_shipping">
+                        <div class="col-8 er-form-padding">
+                            <select name="shipping" class="select form-control" required="" id="shipping">
                                 <option value="">---------</option>
                                 <option value="1" selected="">The Netherlands</option>
                             </select>
                         </div>
                     </div>
+
+                    <div id="div_id_order_message" class="form-group row">
+                        <label for="id_order_message" class="col-form-label col-4 er-form-padding">
+                            Optional message</label>
+                        <div class="col-8 er-form-padding">
+                            <textarea name="order_message" cols="10" rows="3" maxlength="1000"
+                                class="textarea form-control" id="order_message">
+                            </textarea>
+                            <span id="hint_id_order_message" class="text-muted">Leave any specifics regarding pick-up or
+                                delivery</span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="offset-4 col-8 er-form-padding">
+                            <div id="div_id_save_details" class="custom-control custom-checkbox">
+                                <input type="checkbox" name="save_details" value="update"
+                                    class="checkboxinput custom-control-input" id="save_details">
+                                <label for="save_details" class="custom-control-label">
+                                    Save changes</label>
+                                <span id="hint_id_save_details" class="text-muted"><br>Update your account
+                                    details</span>
+                            </div>
+                        </div>
+                    </div>
+
                 </form>
             </div>
 
@@ -134,34 +173,7 @@
 
 
 
-        <div class="col-12 order-1 col-md-6 order-md-2">
-            <!-- Show total and shipping costs -->
-            <div class="row">
-                <div class="col-6 er-checkout-left">
-                    <p>Ship to :</p>
-                    <p>Shipping cost :</p>
-                </div>
-                <div class="col-6 er-checkout-right">
-                    <p>{{ user_details.shipping.region }}</p>
-                    <p>{{ user_details.shipping.price }} <i class="fas fa-euro-sign"></i></p>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-6 er-checkout-left">
-                    <p>Total :</p>
-                </div>
-                <div class="col-6 er-checkout-right">
-                    <p>{{ total|add:user_details.shipping.price }} <i class="fas fa-euro-sign"></i></p>
-                </div>
-            </div>
-            <div class="row er-list-divider">
-                <div class="col-12">
-                    <p>
-                        <hr>
-                    </p>
-                </div>
-            </div>
+        <div class="col-12 order-3 col-md-6 order-md-2">
 
             <!-- Show all items in the shopping cart -->
             {% for item in cart_items %}
@@ -230,6 +242,28 @@
                     </p>
                 </div>
             </div>
+            <!-- Show total and shipping costs -->
+            <div class="row">
+                <div class="col-6 er-checkout-left">
+                    <p>Ship to :</p>
+                    <p>Shipping cost :</p>
+                </div>
+                <div class="col-6 er-checkout-right">
+                    <p>{{ user_details.shipping.region }}</p>
+                    <p>{{ user_details.shipping.price }} <i class="fas fa-euro-sign"></i></p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-6 er-checkout-left">
+                    <p>Total :</p>
+                </div>
+                <div class="col-6 er-checkout-right">
+                    <p>{{ total|add:user_details.shipping.price }} <i class="fas fa-euro-sign"></i></p>
+                </div>
+            </div>
+
+
             {% endfor %}
 
         </div>
@@ -239,6 +273,10 @@
 <!-- Main menu highlite shop -->
 <script>
     $('#er-shop-active').addClass('active');
+    // Make filter submit on select
+    $('#id_shipping_options').change(function () {
+        $('#er-change-shipping').submit();
+    });
 </script>
 <!-- Load special screen events (rotate arrow dropdown) -->
 <script src="{% static 'js/dropdown-events.js' %}"></script>

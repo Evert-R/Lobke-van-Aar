@@ -6,9 +6,10 @@ from django.core.mail import send_mail
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.http import JsonResponse
-from .forms import PaymentForm
+from .forms import PaymentForm, shippingForm
 from .models import orders, order_items
 from works.models import work_items
+from shop.models import shipping
 from accounts.models import user_details
 from accounts.forms import UserDetailsForm
 from django.conf import settings
@@ -69,6 +70,7 @@ def create_payment(request):
     except Exception as e:
         return JsonResponse({'error':str(e)},status= 403)
 
+@login_required()
 @require_POST
 def cache_checkout_data(request):
     """
@@ -78,41 +80,42 @@ def cache_checkout_data(request):
     """
     pid = request.POST.get('client_secret').split('_secret')[0]
     order_number = request.POST['order_number']
+    full_name = request.POST['full_name']
     address1 = request.POST['address1']
     address2 = request.POST['address2']
     postcode = request.POST['postcode']
     city = request.POST['city']
     country = request.POST['country']
     telephone = request.POST['telephone']
+    shipping = request.POST['shipping']
+    order_message = request.POST['order_message']
+    save_details = request.POST['save_details']
     # Get cart contents
     cart = request.session.get('cart', {})
     total = 0
-    # Return to shop if cart is empty
-    if cart == {}:
-        messages.error(
-                request, 'There is nothing to check out')
-        return redirect('shop:all_shop_works')
-    if not request.user.is_authenticated:
-        messages.error(request, "Please register before checking out")
-        return redirect('accounts:register_user')
     # Get logged in user
     active_user = request.user
-    try:
-        current_user_details = user_details.objects.get(user=active_user)
-    except:
-        # If not show shipping details form
-        messages.error(request, "Please provide your shipping details")
-        return redirect('accounts:shipping_details')
+    current_user_details = user_details.objects.get(user=active_user)
+    if save_details == 'update':
+        current_user_details.address1 = address1
+        current_user_details.address2 = address2
+        current_user_details.postcode = postcode
+        current_user_details.city = city
+        current_user_details.country = country
+        current_user_details.telephone = telephone
+        current_user_details.save()
     try:        
         stripe.api_key = os.getenv('STRIPE_SECRET')        
         stripe.PaymentIntent.modify(pid, metadata={
             'order_number': request.POST['order_number'],
+            'full_name': request.POST['full_name'],
             'address1': request.POST['address1'],
             'address2': request.POST['address2'],
             'postcode': request.POST['postcode'],
             'city': request.POST['city'],
             'country': request.POST['country'],
             'telephone': request.POST['telephone'],
+            'order_message': request.POST['order_message']
         })
         print(stripe.PaymentIntent)        
     except Exception as e:
@@ -121,12 +124,16 @@ def cache_checkout_data(request):
         return HttpResponse(content=e, status=400)
     try:
         order = orders.objects.get(stripe_pid=stripe_pid)
+        order.shipping = current_user_details.shipping.price
+        order.region = current_user_details.shipping.region
+        order.full_name = full_name
         order.address1 = address1
         order.address2 = address2
         order.postcode = postcode
         order.city = city
         order.country = country
         order.telephone = telephone
+        order.order_message = order_message
         order.save()
     except:        
         order=orders(order_number=order_number,
@@ -134,12 +141,15 @@ def cache_checkout_data(request):
                             user=active_user,
                             date=timezone.now(),
                             shipping=current_user_details.shipping.price,
+                            region=current_user_details.shipping.region,
+                            full_name=full_name,
                             address1=address1,
                             address2=address2,
                             postcode=postcode,
                             city=city,
                             country=country,
                             telephone=telephone,
+                            order_message=order_message
                             )
         order.save()
     # Add shipping cost to total
@@ -162,6 +172,14 @@ def cache_checkout_data(request):
         order_item.save()
     order.total = total
     order.save()
+    if save_details == 'update':
+        current_user_details.address1 = address1
+        current_user_details.address2 = address2
+        current_user_details.postcode = postcode
+        current_user_details.city = city
+        current_user_details.country = country
+        current_user_details.telephone = telephone
+        current_user_details.save()
     return HttpResponse(status=200)
     
 
@@ -234,6 +252,15 @@ def check_out(request):
     Renders the checkout page with cart contents
     """
     next = request.GET.get('next', '/')
+    # Get logged in user
+    active_user = request.user
+    try:
+        current_user_details = user_details.objects.get(user=active_user)
+    except:
+        # If not show shipping details form
+        messages.error(request, "Please provide your shipping details")
+        return redirect('accounts:shipping_details')
+    shipping_form = shippingForm()               
     # Get cart contents
     cart = request.session.get('cart', {})
     total = 0
@@ -254,15 +281,6 @@ def check_out(request):
     if not request.user.is_authenticated:
         messages.error(request, "Please register before checking out")
         return redirect('accounts:register_user')
-    # Get logged in user
-    active_user = request.user
-    try:
-        current_user_details = user_details.objects.get(user=active_user)
-    except:
-        # If not show shipping details form
-        messages.error(request, "Please provide your shipping details")
-        return redirect('accounts:shipping_details')
-
     order_unique = False
     order_number = ''
     while order_unique == False:
@@ -273,10 +291,29 @@ def check_out(request):
             )            
         except:
             order_unique = True
-    return render(request, "checkout.html",
-                  {'order_number': order_number,
-                   'total': total,
-                   'user': active_user,
-                   'user_details': current_user_details,                                    
-                   'publishable': os.getenv('STRIPE_PUBLISHABLE'),
-                   'next': next})
+    if request.method == "POST":
+        new_shipping = shippingForm(request.POST)
+        if new_shipping.is_valid():
+            shipping_id = new_shipping.cleaned_data['shipping_options'].id
+            shipping_object = shipping.objects.get(id=shipping_id)
+            current_user_details.shipping = shipping_object
+            current_user_details.save()
+            shipping_form.fields['shipping_options'].initial = current_user_details.shipping
+        return render(request, "checkout.html",
+            {'order_number': order_number,
+            'total': total,
+            'user': active_user,
+            'user_details': current_user_details,
+            'shipping_form': shipping_form,                                    
+            'publishable': os.getenv('STRIPE_PUBLISHABLE'),
+            'next': next})
+    else:
+        shipping_form.fields['shipping_options'].initial = current_user_details.shipping
+        return render(request, "checkout.html",
+                    {'order_number': order_number,
+                    'total': total,
+                    'user': active_user,
+                    'user_details': current_user_details,
+                    'shipping_form': shipping_form,                                    
+                    'publishable': os.getenv('STRIPE_PUBLISHABLE'),
+                    'next': next})

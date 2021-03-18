@@ -1055,7 +1055,7 @@ table {
 
 .er-checkout {
     padding-top: 0;
-    padding-bottom: 2rem;
+    padding-bottom: 12rem;
 }
 
 .er-checkout h5 {
@@ -1416,7 +1416,9 @@ form .row {
 
 .col-form-label {
     width: 100%;
-    text-align: center;
+    text-align: left;
+    padding-left: 1rem;
+    padding-right: 1rem;
     margin-bottom: 0.4rem;
     background-color: rgba(92, 109, 178, 0.7);
     border-radius: 4px;
@@ -1444,12 +1446,6 @@ form .row {
     }
     form .row {
         margin-bottom: 0.9rem;
-    }
-    .col-form-label {
-        text-align: right;
-        padding-left: 1rem;
-        padding-right: 1rem;
-        background-color: rgba(92, 109, 178, 0.7);
     }
     .er-image-select {
         margin-bottom: 0.1rem;
@@ -1643,7 +1639,7 @@ form .row {
         background-size: 90%;
     }
     .er-detail-left {
-        padding-right: 6.4rem;
+        padding-right: 1.6rem;
     }
     .er-detail-bottom {
         padding-right: 1rem;

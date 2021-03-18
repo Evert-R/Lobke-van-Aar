@@ -22,6 +22,7 @@ class orders(models.Model):
     sent_tracking = models.CharField(blank=True, max_length=254)
     total = models.DecimalField(
         max_digits=5, decimal_places=2, default=0)
+    full_name = models.CharField(blank=True, max_length=50)
     address1 = models.CharField(blank=True, max_length=50)
     address2 = models.CharField(blank=True, max_length=50)
     postcode = models.CharField(blank=True, max_length=50)
@@ -30,6 +31,8 @@ class orders(models.Model):
     telephone = models.CharField(blank=True, max_length=25)
     shipping = models.DecimalField(
         max_digits=5, decimal_places=2, default=0)
+    region = models.CharField(blank=True, max_length=200)
+    order_message = models.CharField(max_length=1000, blank=True)
 
     def __str__(self):
         return self.order_number       

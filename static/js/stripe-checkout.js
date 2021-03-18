@@ -7,28 +7,28 @@ let orderData = {
 
 // Get the payment intent from the local server
 fetch("/checkout/create-payment-intent", {
-    method: "POST",
-    headers: {
-        "Content-Type": "application/json"
-    },
-    body: JSON.stringify(orderData)
-})
-    .then(function (result) {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(orderData)
+    })
+    .then(function(result) {
         return result.json();
     })
-    .then(function (data) {
+    .then(function(data) {
         return setupElements(data);
     })
-    .then(function ({ stripe, card, ideal, clientSecret }) {
+    .then(function({ stripe, card, ideal, clientSecret }) {
         $('#client_secret').val(clientSecret);
         console.log(clientSecret);
-        document.querySelector("#pay-form").addEventListener("submit", function (evt) {
+        document.querySelector("#pay-form").addEventListener("submit", function(evt) {
             evt.preventDefault();
             // Initiate payment when the submit button is clicked
             pay(stripe, card, ideal, clientSecret);
         });
-        document.querySelectorAll(".sr-pm-button").forEach(function (el) {
-            el.addEventListener("click", function (evt) {
+        document.querySelectorAll(".sr-pm-button").forEach(function(el) {
+            el.addEventListener("click", function(evt) {
                 let id = evt.target.id;
                 if (id === "card-button") {
                     showElement("#card-element");
@@ -46,7 +46,7 @@ fetch("/checkout/create-payment-intent", {
     });
 
 // Set up Stripe.js and Elements to use in checkout form
-let setupElements = function (data) {
+let setupElements = function(data) {
     stripe = Stripe(data.publishableKey, { betas: ["ideal_pm_beta_1"] });
     let elements = stripe.elements();
     let style = {
@@ -86,12 +86,16 @@ function cacheCheckoutData(clientSecret) {
         'csrfmiddlewaretoken': $('input[name="csrfmiddlewaretoken"]').val(),
         'client_secret': clientSecret,
         'order_number': $('#order_number').val(),
+        'full_name': $('#full_name').val(),
         'address1': $('#address1').val(),
         'address2': $('#address2').val(),
         'postcode': $('#postcode').val(),
         'city': $('#city').val(),
         'country': $('#country').val(),
-        'telephone': $('#telephone').val()
+        'telephone': $('#telephone').val(),
+        'shipping': $('#shipping').val(),
+        'order_message': $('#order_message').val(),
+        'save_details': $('#save_details').val()
     }
     let url = '/checkout/cache-checkout-data';
     $.post(url, postData).done();
@@ -101,27 +105,32 @@ function cacheCheckoutData(clientSecret) {
  * Calls stripe.handleCardPayment which creates a pop-up modal to
  * prompt the user to enter extra authentication details without leaving your page
  */
-let pay = function (stripe, card, ideal, clientSecret) {
+let pay = function(stripe, card, ideal, clientSecret) {
     changeLoadingState(true);
 
     const selectedPaymentMethod = document.querySelector(
         ".sr-pm-button.selected"
     );
-
+    console.log($('#save_details').val());
     let postData = {
         'csrfmiddlewaretoken': $('input[name="csrfmiddlewaretoken"]').val(),
         'client_secret': clientSecret,
         'order_number': $('#order_number').val(),
+        'full_name': $('#full_name').val(),
         'address1': $('#address1').val(),
         'address2': $('#address2').val(),
         'postcode': $('#postcode').val(),
         'city': $('#city').val(),
         'country': $('#country').val(),
-        'telephone': $('#telephone').val()
+        'telephone': $('#telephone').val(),
+        'shipping': $('#shipping').val(),
+        'order_message': $('#order_message').val(),
+        'save_details': $('#save_details').val()
     }
 
+
     let url = '/checkout/cache-checkout-data';
-    $.post(url, postData).done(function () {
+    $.post(url, postData).done(function() {
         switch (selectedPaymentMethod.id) {
             case "card-button":
                 payWithCard(stripe, clientSecret, card, postData);
@@ -135,12 +144,12 @@ let pay = function (stripe, card, ideal, clientSecret) {
     });
 };
 
-let payWithCard = function (stripe, clientSecret, card, postData) {
+let payWithCard = function(stripe, clientSecret, card, postData) {
     // Initiate the payment.
     // If authentication is required, confirmCardPayment will automatically display a modal
     stripe
         .confirmCardPayment(clientSecret, { payment_method: { card: card } })
-        .then(function (result) {
+        .then(function(result) {
             if (result.error) {
                 // Show error to your customer
                 showError(result.error.message);
@@ -151,7 +160,7 @@ let payWithCard = function (stripe, clientSecret, card, postData) {
         });
 };
 
-let payWithiDEAL = function (stripe, clientSecret, ideal, postData) {
+let payWithiDEAL = function(stripe, clientSecret, ideal, postData) {
     // Initiate the payment.
     // confirmIdealPayment will redirect the customer to their bank
     stripe
@@ -166,8 +175,8 @@ let payWithiDEAL = function (stripe, clientSecret, ideal, postData) {
 /* ------- Post-payment helpers ------- */
 
 /* Shows a success / error message when the payment is complete */
-let orderComplete = function (clientSecret, postData) {
-    stripe.retrievePaymentIntent(clientSecret).then(function (result) {
+let orderComplete = function(clientSecret, postData) {
+    stripe.retrievePaymentIntent(clientSecret).then(function(result) {
         let paymentIntent = result.paymentIntent;
         let paymentIntentJson = JSON.stringify(paymentIntent, null, 2);
         console.log(paymentIntentJson);
@@ -180,17 +189,17 @@ let orderComplete = function (clientSecret, postData) {
     });
 };
 
-let showError = function (errorMsgText) {
+let showError = function(errorMsgText) {
     changeLoadingState(false);
     let errorMsg = document.querySelector(".sr-field-error");
     errorMsg.textContent = errorMsgText;
-    setTimeout(function () {
+    setTimeout(function() {
         errorMsg.textContent = "";
     }, 4000);
 };
 
 // Show a spinner on payment submission
-let changeLoadingState = function (isLoading) {
+let changeLoadingState = function(isLoading) {
     if (isLoading) {
         showElement("#spinner");
         hideElement("#button-text");
@@ -202,10 +211,10 @@ let changeLoadingState = function (isLoading) {
     }
 };
 
-let showElement = function (query) {
+let showElement = function(query) {
     document.querySelector(query).classList.remove("hidden");
 };
 
-let hideElement = function (query) {
+let hideElement = function(query) {
     document.querySelector(query).classList.add("hidden");
 };
