@@ -20,8 +20,8 @@ class LogInForm(forms.Form):
         self.helper.help_text_inline = True
         self.helper.form_tag = False
         self.helper.form_class = 'form-horizontal'
-        self.helper.label_class = 'col-sm-4 er-form-padding'
-        self.helper.field_class = 'col-sm-8 er-form-padding'
+        self.helper.label_class = 'col-4 er-form-padding'
+        self.helper.field_class = 'col-8 er-form-padding'
         self.helper.add_input(
             Submit('submit', 'Log in', css_class='er-green'))
 
@@ -47,8 +47,8 @@ class RegisterForm(UserCreationForm):
         self.helper.help_text_inline = True
         self.helper.form_tag = False
         self.helper.form_class = 'form-horizontal'
-        self.helper.label_class = 'col-sm-4 er-form-padding'
-        self.helper.field_class = 'col-sm-8 er-form-padding'
+        self.helper.label_class = 'col-4 er-form-padding'
+        self.helper.field_class = 'col-8 er-form-padding'
         self.helper.add_input(
             Submit('submit', 'Register', css_class='er-green'))
 
@@ -67,8 +67,8 @@ class UserUpdateForm(ModelForm):
         self.helper.help_text_inline = True
         self.helper.form_tag = False
         self.helper.form_class = 'form-horizontal'
-        self.helper.label_class = 'col-sm-4 er-form-padding'
-        self.helper.field_class = 'col-sm-8 er-form-padding'
+        self.helper.label_class = 'col-4 er-form-padding'
+        self.helper.field_class = 'col-8 er-form-padding'
         self.helper.add_input(
             Submit('submit', 'Submit', css_class='er-green'))
 
@@ -86,8 +86,8 @@ class ResetPasswordForm(PasswordResetForm):
         self.helper.help_text_inline = True
         self.helper.form_tag = False
         self.helper.form_class = 'form-horizontal'
-        self.helper.label_class = 'col-sm-4 er-form-padding'
-        self.helper.field_class = 'col-sm-8 er-form-padding'
+        self.helper.label_class = 'col-4 er-form-padding'
+        self.helper.field_class = 'col-8 er-form-padding'
         self.helper.add_input(
             Submit('submit', 'Reset my password', css_class='er-red'))
 
@@ -105,8 +105,8 @@ class PasswordSetForm(SetPasswordForm):
         self.helper.help_text_inline = True
         self.helper.form_tag = False
         self.helper.form_class = 'form-horizontal'
-        self.helper.label_class = 'col-sm-4 er-form-padding'
-        self.helper.field_class = 'col-sm-8 er-form-padding'
+        self.helper.label_class = 'col-4 er-form-padding'
+        self.helper.field_class = 'col-8 er-form-padding'
         self.helper.add_input(
             Submit('submit', 'Reset my password', css_class='er-green'))
 
@@ -127,7 +127,7 @@ class UserDetailsForm(ModelForm):
         self.helper.help_text_inline = True
         self.helper.form_tag = False
         self.helper.form_class = 'form-horizontal'
-        self.helper.label_class = 'col-sm-4 er-form-padding'
-        self.helper.field_class = 'col-sm-8 er-form-padding'
+        self.helper.label_class = 'col-4 er-form-padding'
+        self.helper.field_class = 'col-8 er-form-padding'
         self.helper.add_input(
             Submit('submit', 'Submit', css_class='er-green'))
