@@ -33,7 +33,7 @@
                 <span class="er-small">{{ order.order_number }}</span><br><br>
                 <span class="er-bold  er-small">Shipping address:</span><br>
                 <p class="text-left">
-                    <span class="er-small">{{ order.user.first_name }} {{ order.user.last_name }}</span><br>
+                    <span class="er-small">{{ order.full_name }}</span><br>
                     <span class="er-small">{{ order.address1 }}</span><br>
                     {% if order.adress2 %}
                     <span class="er-small">{{ order.address2 }}</span><br>
@@ -42,6 +42,12 @@
                     <span class="er-small">{{ order.city }}</span><br>
                     <span class="er-small">{{ order.country }}</span><br>
                 </p>
+                {% if order.order_message %}
+                <span class="er-bold er-small">Message to Lobke:</span><br>
+                <p class="text-left er-small">
+                    {{ order.order_message }}
+                </p>
+                {% endif %}
                 <br>
                 {% if order.sent %}
                 <p class="text-left">This order was sent on {{ order.sent_date }}</p>
