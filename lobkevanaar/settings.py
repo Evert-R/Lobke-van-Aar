@@ -44,7 +44,11 @@ ALLOWED_HOSTS = ['85.187.140.198',
                  '192.168.2.12',
                  '192.168.2.10',
                  'findme-eat.online',
-                 '127.0.0.1']
+                 '127.0.0.1',
+                 'lyriclicking.nl',
+                 '86.95.243.199',
+                 'rotdesign.site'
+                 ]
 
 
 # Application definition
