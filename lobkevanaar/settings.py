@@ -47,7 +47,7 @@ ALLOWED_HOSTS = ['85.187.140.198',
                  '127.0.0.1',
                  'lyriclicking.nl',
                  '86.95.243.199',
-                 'rotdesign.site'
+                 'lobkevanaar.rotdesign.site'
                  ]
 
 
