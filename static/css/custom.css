@@ -573,6 +573,7 @@ table {
 }
 
 .er-collection-wrap {
+    display: none;
     padding: 1rem;
     margin-top: 2rem;
     margin-bottom: 1rem;
@@ -585,17 +586,22 @@ table {
 }
 
 .er-collection-image {
+    position: fixed;
+    top: 8vh;
+    left: 0;
+    z-index: 6000;
+    background-color: rgba(255, 255, 255);
     background-position: center;
     background-size: contain;
     background-repeat: no-repeat;
     padding: 1.2rem;
-    height: 18rem;
-    width: 100%;
+    height: 84vh;
+    width: 100vw;
 }
 
 .er-collection-next {
-    position: absolute;
-    right: 3rem;
+    position: fixed;
+    right: 4.2rem;
     top: 50%;
     -webkit-transform: translateY(-50%);
     -ms-transform: translateY(-50%);
@@ -604,12 +610,19 @@ table {
 }
 
 .er-collection-previous {
-    position: absolute;
-    left: 3rem;
+    position: fixed;
+    left: 4.2rem;
     top: 50%;
     -webkit-transform: translateY(-50%);
     -ms-transform: translateY(-50%);
     transform: translateY(-50%);
+    cursor: pointer;
+}
+
+.er-collection-stop {
+    position: fixed;
+    right: 1.5rem;
+    top: 1rem;
     cursor: pointer;
 }
 

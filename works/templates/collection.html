@@ -2,83 +2,103 @@
 {% load static %}
 {% block content %}
 <section class="container-lg er-works">
-    <div class="row">
+    <div class="row er-collection-masonry">
         <div class="col-12">
             <h1>{{ work.title }}</h1>
         </div>
     </div>
-    <!-- Show collection carroussel -->
-    <div class="row">
-        <div class="col-12 col-lg-10 offset-lg-1">
-            <div class="er-collection-wrap">
-                <!-- Show main image -->
-                <div class="er-collection-image" id="collection-main"
-                    style="background-image: url({{ MEDIA_URL }}{{ work.main_image }});">
-                    <div class="er-collection-next">
-                        <i class="fas fa-chevron-right" id="collection-start"></i>
-                    </div>
-                </div>
-                <!-- Create all images and hide them  -->
-                {% for image in images %}
-                <div class="er-collection-image d-none" id="collection-{{ forloop.counter0 }}"
-                    style="background-image: url({{ MEDIA_URL }}{{ image.work_image }});">
-                    {% if forloop.first %}
-                    {# first previous button directs to main image #}
-                    <div class="er-collection-previous">
-                        <i class="fas fa-chevron-left" id="first"></i>
-                    </div>
-                    {% else %}
-                    <div class="er-collection-previous">
-                        <i class="fas fa-chevron-left" id="previous-{{ forloop.counter0 }}"></i>
-                    </div>
-                    {% endif %}
 
-                    {% if not forloop.last %}
-                    <div class="er-collection-next">
-                        <i class="fas fa-chevron-right" id="next-{{ forloop.counter0 }}"></i>
+    <!-- Show all works -->
+    <div class="container-md er-works er-collection-masonry">
+        <div class="row">
+            <div class="col-12">
+                <div class="card-columns">
+                    {% for image in images %}
+                    <div class="card border-0" id="col-work-{{ forloop.counter0 }}">
+
+                        <img class="card-img-top" src="{{ MEDIA_URL }}{{ image.work_image }}" alt="Card image cap">
+
                     </div>
-                    {% else %}
-                    {# Last next button restarts the loop #}
-                    <div class="er-collection-next">
-                        <i class="fas fa-undo" id="restart"></i>
-                    </div>
-                    {% endif %}
+                    <script>
+                        // attach click function to next image button
+                        $('#col-work-{{ forloop.counter0 }}').click(function () {
+                            $('.er-collection-masonry').addClass('d-none');
+                            $('#collection-{{ forloop.counter0 }}').removeClass('d-none');
+                        })
+                    </script>
+
+                    {% endfor %}
                 </div>
 
-                <script>
-                    // attach click function to next image button
-                    $('#next-{{ forloop.counter0 }}').click(function () {
-                        $('#collection-{{ forloop.counter0 }}').addClass('d-none');
-                        $('#collection-{{ forloop.counter0|add:1 }}').removeClass('d-none');
-                    })
-                    // attach click function to previous image button
-                    $('#previous-{{ forloop.counter0 }}').click(function () {
-                        $('#collection-{{ forloop.counter0 }}').addClass('d-none');
-                        $('#collection-{{ forloop.counter0|add:-1 }}').removeClass('d-none');
-                    })
-                </script>
-
-                {% endfor %}
             </div>
         </div>
     </div>
-</section>
 
+    <!-- Show collection carroussel -->
+    <div class="row">
+        <div class="col-12">
+            <!-- Create all images and hide them  -->
+            {% for image in images %}
+            <div class="er-collection-image d-none" id="collection-{{ forloop.counter0 }}"
+                style="background-image: url({{ MEDIA_URL }}{{ image.work_image }});">
+                {% if forloop.first %}
+                {# first previous button directs to main image #}
+                <div class="er-collection-previous">
+
+                </div>
+                {% else %}
+                <div class="er-collection-previous">
+                    <i class="fas fa-chevron-left" id="previous-{{ forloop.counter0 }}"></i>
+                </div>
+                {% endif %}
+
+                {% if not forloop.last %}
+                <div class="er-collection-next">
+                    <i class="fas fa-chevron-right" id="next-{{ forloop.counter0 }}"></i>
+                </div>
+                {% else %}
+                {# Last next button restarts the loop #}
+                <div class="er-collection-next">
+
+                </div>
+                {% endif %}
+                <div class="er-collection-stop">
+                    <i class="fas fa-times" id="stop"></i>
+                </div>
+            </div>
+
+            <script>
+                // attach click function to next image button
+                $('#next-{{ forloop.counter0 }}').click(function () {
+                    $('#collection-{{ forloop.counter0 }}').addClass('d-none');
+                    $('#collection-{{ forloop.counter0|add:1 }}').removeClass('d-none');
+                })
+                // attach click function to previous image button
+                $('#previous-{{ forloop.counter0 }}').click(function () {
+                    $('#collection-{{ forloop.counter0 }}').addClass('d-none');
+                    $('#collection-{{ forloop.counter0|add:-1 }}').removeClass('d-none');
+                })
+            </script>
+
+            {% endfor %}
+        </div>
+
+    </div>
+</section>
 <script>
     // Previous button for first image to go back to main image
     $('#first').click(function () {
         $('.er-collection-image').addClass('d-none');
-        $('#collection-main').removeClass('d-none');
+        $('.er-collection-masonry').removeClass('d-none');
     })
-    // Next button to start the loop
-    $('#collection-start').click(function () {
-        $('#collection-0').removeClass('d-none');
-        $('#collection-main').addClass('d-none');
+    $('.er-collection-stop').click(function () {
+        $('.er-collection-image').addClass('d-none');
+        $('.er-collection-masonry').removeClass('d-none');
     })
     // Last next button to restart the loop
     $('#restart').click(function () {
         $('.er-collection-image').addClass('d-none');
-        $('#collection-main').removeClass('d-none');
+        $('#collection-0').removeClass('d-none');
     })
 </script>
 
